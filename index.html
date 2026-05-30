@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commander Stats Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #070b0f;
+  --bg2: #0c1219;
+  --bg3: #101820;
+  --border: #1c3444;
+  --border2: #0e2030;
+  --accent: #00d4ff;
+  --accent2: #ff6b35;
+  --accent3: #39ff14;
+  --purple: #bf5fff;
+  --text: #ccdde8;
+  --text2: #5a8096;
+  --danger: #ff3344;
+  --gold: #ffd700;
+  --glow: 0 0 14px rgba(0,212,255,0.45);
+  --glow2: 0 0 14px rgba(255,107,53,0.45);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Rajdhani',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  font-size:16px;
+}
+body::before{
+  content:'';position:fixed;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(0,212,255,0.025) 40px),
+             repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(0,212,255,0.015) 40px);
+  pointer-events:none;z-index:0;
+}
+.scanline{position:fixed;inset:0;background:repeating-linear-gradient(to bottom,transparent 0,transparent 3px,rgba(0,0,0,0.1) 3px,rgba(0,0,0,0.1) 4px);pointer-events:none;z-index:1;}
+.wrap{max-width:1200px;margin:0 auto;padding:24px;position:relative;z-index:2;}
+
+/* HEADER */
+header{text-align:center;padding:32px 0 24px;border-bottom:1px solid var(--border);margin-bottom:30px;}
+header::before{content:'▶ TACTICAL COMMAND INTERFACE ◀';display:block;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);letter-spacing:4px;margin-bottom:10px;}
+h1{font-family:'Orbitron',monospace;font-size:clamp(22px,4vw,36px);font-weight:900;color:var(--accent);text-shadow:var(--glow);letter-spacing:3px;}
+h1 span{color:var(--accent2);}
+.subtitle{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2);margin-top:8px;letter-spacing:2px;}
+
+/* PANEL */
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:3px;overflow:hidden;position:relative;margin-bottom:22px;}
+.panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);}
+.panel-hd{background:var(--bg3);border-bottom:1px solid var(--border2);padding:13px 20px;display:flex;align-items:center;gap:10px;}
+.ph-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:var(--glow);animation:blink 2s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.ph-title{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:3px;color:var(--accent);text-transform:uppercase;}
+.panel-body{padding:20px;}
+
+/* TEXTAREA */
+textarea{
+  width:100%;background:var(--bg);border:1px solid var(--border);border-radius:3px;
+  color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;
+  padding:14px;resize:vertical;min-height:120px;outline:none;
+  transition:border-color .2s;line-height:1.7;
+}
+textarea:focus{border-color:var(--accent);box-shadow:0 0 0 1px rgba(0,212,255,0.1);}
+textarea::placeholder{color:var(--text2);opacity:.5;}
+
+/* BUTTONS */
+.btn{
+  font-family:'Orbitron',monospace;font-size:12px;letter-spacing:2px;font-weight:700;
+  padding:13px 26px;border:1px solid;border-radius:3px;cursor:pointer;
+  transition:all .15s;text-transform:uppercase;position:relative;overflow:hidden;
+  white-space:nowrap;
+}
+.btn::before{content:'';position:absolute;inset:0;background:currentColor;opacity:0;transition:opacity .15s;}
+.btn:hover::before{opacity:.07;}
+.btn-cyan{background:transparent;color:var(--accent);border-color:var(--accent);}
+.btn-cyan:hover{box-shadow:var(--glow);background:rgba(0,212,255,0.06);}
+.btn-red{background:transparent;color:var(--danger);border-color:var(--danger);}
+.btn-red:hover{box-shadow:0 0 14px rgba(255,51,68,0.4);}
+.btn-gold{background:transparent;color:var(--gold);border-color:var(--gold);}
+.btn-gold:hover{box-shadow:0 0 14px rgba(255,215,0,0.4);}
+.btn-green{background:transparent;color:var(--accent3);border-color:var(--accent3);}
+.btn-green:hover{box-shadow:0 0 14px rgba(57,255,20,0.4);}
+.btn-sm{padding:8px 16px;font-size:11px;}
+.btn-xs{padding:5px 10px;font-size:10px;}
+.btn-row{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap;align-items:center;}
+
+/* SEARCH */
+.search-box{
+  width:100%;background:var(--bg);border:1px solid var(--border);border-radius:3px;
+  color:var(--text);font-family:'Share Tech Mono',monospace;font-size:14px;
+  padding:11px 16px;outline:none;margin-bottom:12px;transition:border-color .2s;
+}
+.search-box:focus{border-color:var(--accent);}
+.search-box::placeholder{color:var(--text2);opacity:.5;}
+
+/* TOOLBAR */
+.toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px;flex-wrap:wrap;}
+.toolbar-label{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);}
+.toolbar-btns{display:flex;gap:8px;}
+
+/* COMMANDER CARD — the main unit */
+.cmd-card{
+  background:var(--bg);border:1px solid var(--border2);border-radius:3px;
+  margin-bottom:10px;overflow:hidden;transition:border-color .2s;
+}
+.cmd-card:hover{border-color:var(--border);}
+.cmd-card.active{border-color:var(--accent);background:rgba(0,212,255,0.03);}
+.cmd-card.active::before{content:'';display:block;height:2px;background:linear-gradient(90deg,var(--accent),transparent);}
+
+/* Card header row — always visible */
+.cc-head{
+  display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;
+  user-select:none;
+}
+.cc-check{
+  width:22px;height:22px;border:2px solid var(--border);border-radius:3px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;
+}
+.cmd-card.active .cc-check{background:var(--accent);border-color:var(--accent);box-shadow:var(--glow);}
+.cc-tick{display:none;color:var(--bg);font-size:13px;font-weight:900;line-height:1;}
+.cmd-card.active .cc-tick{display:block;}
+.cc-id{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2);min-width:46px;}
+.cc-name{font-size:17px;font-weight:700;color:var(--text);flex:1;}
+.cmd-card.active .cc-name{color:var(--accent);}
+.cc-var{font-family:'Share Tech Mono',monospace;font-size:11px;padding:3px 8px;border-radius:3px;flex-shrink:0;}
+.vp{color:var(--accent3);background:rgba(57,255,20,0.08);border:1px solid rgba(57,255,20,0.2);}
+.vn{color:var(--danger);background:rgba(255,51,68,0.08);border:1px solid rgba(255,51,68,0.2);}
+.vz{color:var(--text2);background:rgba(90,128,150,0.08);border:1px solid rgba(90,128,150,0.2);}
+
+/* Expand chevron */
+.cc-arrow{font-size:11px;color:var(--text2);transition:transform .2s;flex-shrink:0;}
+.cmd-card.expanded .cc-arrow{transform:rotate(180deg);}
+
+/* Card body — stat selectors, shown when expanded */
+.cc-body{
+  border-top:1px solid var(--border2);padding:14px 16px 16px;
+  display:none;
+  animation:expandIn .15s ease;
+}
+.cmd-card.expanded .cc-body{display:block;}
+@keyframes expandIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+
+/* Stat picker inside each card */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
+.sp{
+  padding:12px 6px;border:1px solid var(--border);border-radius:3px;
+  background:var(--bg2);cursor:pointer;text-align:center;
+  transition:all .15s;position:relative;overflow:hidden;
+}
+.sp::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--sc,var(--accent));transform:scaleX(0);transition:transform .15s;}
+.sp.on::after{transform:scaleX(1);}
+.sp:hover{border-color:var(--sc,var(--accent));background:rgba(0,212,255,0.04);}
+.sp.on{border-color:var(--sc,var(--accent));background:rgba(0,212,255,0.07);}
+.sp.on .sp-label{color:var(--sc,var(--accent));}
+.sp-icon{font-size:18px;margin-bottom:4px;}
+.sp-label{font-family:'Orbitron',monospace;font-size:9px;letter-spacing:1px;color:var(--text2);text-transform:uppercase;transition:color .15s;}
+.sp-acc{--sc:#00d4ff;}
+.sp-dod{--sc:#ff6b35;}
+.sp-spd{--sc:#39ff14;}
+.sp-ele{--sc:#bf5fff;}
+
+/* Card action buttons */
+.cc-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.cc-stat-info{
+  font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);
+  margin-bottom:10px;padding:7px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:3px;
+}
+.cc-stat-info span{color:var(--accent);}
+
+/* OUTPUT AREA */
+.out-list{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.out-list::-webkit-scrollbar{width:4px;}
+.out-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.out-entry{
+  display:flex;align-items:center;gap:10px;
+  background:var(--bg);border:1px solid var(--border2);border-radius:3px;
+  padding:12px 16px;animation:slideIn .2s ease;
+}
+.out-entry:hover{border-color:var(--border);}
+@keyframes slideIn{from{opacity:0;transform:translateX(-8px);}to{opacity:1;transform:translateX(0);}}
+.out-tag{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;padding:3px 8px;border-radius:2px;flex-shrink:0;}
+.tag-set{color:var(--accent);background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.25);}
+.tag-max{color:var(--gold);background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.25);}
+.out-cmd{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--text);flex:1;word-break:break-all;}
+.out-name{font-size:13px;color:var(--text2);flex-shrink:0;}
+.copy-btn{
+  background:transparent;border:1px solid var(--border);border-radius:2px;
+  color:var(--text2);cursor:pointer;padding:5px 10px;
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  transition:all .15s;flex-shrink:0;
+}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent);}
+.copy-btn.ok{border-color:var(--accent3);color:var(--accent3);}
+.empty-state{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--text2);text-align:center;padding:36px;opacity:.45;}
+.warn-msg{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--accent2);padding:9px 14px;border:1px solid rgba(255,107,53,0.3);border-radius:3px;background:rgba(255,107,53,0.06);margin-top:10px;display:none;}
+.badge{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:var(--bg);font-family:'Orbitron',monospace;font-size:10px;font-weight:900;padding:2px 8px;border-radius:20px;min-width:24px;}
+.badge-orange{background:var(--accent2);}
+.badge-green{background:var(--accent3);}
+.out-header-actions{display:flex;gap:10px;align-items:center;margin-left:auto;}
+.divider{border:none;border-top:1px solid var(--border2);margin:14px 0;}
+.parse-status{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2);}
+
+/* Responsive */
+@media(max-width:600px){
+  .stat-row{grid-template-columns:repeat(2,1fr);}
+  .cc-name{font-size:15px;}
+  .out-name{display:none;}
+}
+</style>
+</head>
+<body>
+<div class="scanline"></div>
+<div class="wrap">
+
+<header>
+  <h1>COMMANDER <span>STATS</span> GENERATOR</h1>
+  <div class="subtitle">// PASTE · CONFIGURE EACH COMMANDER · GENERATE COMMANDS</div>
+</header>
+
+<!-- INPUT PANEL -->
+<div class="panel">
+  <div class="panel-hd">
+    <div class="ph-dot"></div>
+    <div class="ph-title">BULLETIN INPUT</div>
+  </div>
+  <div class="panel-body">
+    <textarea id="bulletinInput" placeholder="Paste bulletin data here...&#10;[Bulletin]: User 35's commanders: [Bulletin]: 1337: Eva (Variance: -1) ..."></textarea>
+    <div class="btn-row">
+      <button class="btn btn-cyan" onclick="parseBulletin()">⚡ PARSE BULLETIN</button>
+      <button class="btn btn-red btn-sm" onclick="clearAll()">✕ CLEAR ALL</button>
+      <span id="parseStatus" class="parse-status"></span>
+    </div>
+  </div>
+</div>
+
+<!-- COMMANDERS PANEL -->
+<div class="panel" id="cmdPanel" style="display:none">
+  <div class="panel-hd">
+    <div class="ph-dot" style="background:var(--accent2);box-shadow:var(--glow2)"></div>
+    <div class="ph-title">COMMANDERS</div>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+      <span class="parse-status" id="configCount"></span>
+      <span id="selBadge" class="badge badge-orange">0</span>
+    </div>
+  </div>
+  <div class="panel-body">
+    <input class="search-box" id="searchBox" type="text" placeholder="🔍  Search by name or ID..." oninput="filterCards()">
+    <div class="toolbar">
+      <span class="toolbar-label">QUICK SELECT</span>
+      <div class="toolbar-btns">
+        <button class="btn btn-cyan btn-sm" onclick="selectAll()">SELECT ALL</button>
+        <button class="btn btn-red btn-sm" onclick="deselectAll()">DESELECT ALL</button>
+        <button class="btn btn-gold btn-sm" onclick="collapseAll()">COLLAPSE ALL</button>
+      </div>
+    </div>
+    <div id="cardList"></div>
+  </div>
+</div>
+
+<!-- GENERATE PANEL -->
+<div class="panel" id="genPanel" style="display:none">
+  <div class="panel-hd">
+    <div class="ph-dot" style="background:var(--purple);box-shadow:0 0 14px rgba(191,95,255,0.45)"></div>
+    <div class="ph-title">BULK ACTIONS</div>
+  </div>
+  <div class="panel-body">
+    <p style="font-size:15px;color:var(--text2);margin-bottom:14px;">Generate commands for all <strong style="color:var(--accent)">selected</strong> commanders at once using their individually configured stats.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-cyan" onclick="generateAll('set')">⚡ GENERATE SET STATS</button>
+      <button class="btn btn-gold" onclick="generateAll('max')">★ GENERATE MAX</button>
+    </div>
+    <div id="genWarn" class="warn-msg"></div>
+  </div>
+</div>
+
+<!-- OUTPUT PANEL -->
+<div class="panel" id="outPanel" style="display:none">
+  <div class="panel-hd">
+    <div class="ph-dot" style="background:var(--accent3);box-shadow:0 0 14px rgba(57,255,20,0.45)"></div>
+    <div class="ph-title">GENERATED COMMANDS</div>
+    <div class="out-header-actions">
+      <span id="outBadge" class="badge badge-green">0</span>
+      <button class="btn btn-green btn-sm" onclick="copyAll()">📋 COPY ALL</button>
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="out-list" id="outList">
+      <div class="empty-state">// AWAITING COMMAND GENERATION</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+let commanders = [];
+// Per-commander state: { stats: Set, expanded: bool, selected: bool }
+let state = {};
+
+const STAT_POS = {accuracy:0, dodge:1, speed:2, electron:3};
+const STAT_META = {
+  accuracy: {icon:'🎯', label:'Accuracy', cls:'sp-acc'},
+  dodge:    {icon:'💨', label:'Dodge',    cls:'sp-dod'},
+  speed:    {icon:'⚡', label:'Speed',    cls:'sp-spd'},
+  electron: {icon:'⚛️', label:'Electron', cls:'sp-ele'},
+};
+
+// ── PARSE ──────────────────────────────────────────────
+function parseBulletin() {
+  const raw = document.getElementById('bulletinInput').value;
+  const re = /\[Bulletin\]:\s*(\d+):\s*(.+?)\s*\(Variance:\s*([+-]?\d+)\)/g;
+  commanders = [];
+  let m;
+  while ((m = re.exec(raw)) !== null) {
+    commanders.push({id: m[1], name: m[2].trim(), variance: parseInt(m[3])});
+  }
+  if (!commanders.length) {
+    document.getElementById('parseStatus').textContent = '⚠ No commanders found';
+    return;
+  }
+  document.getElementById('parseStatus').textContent = `✓ ${commanders.length} commanders loaded`;
+  // Init state
+  state = {};
+  commanders.forEach(c => { state[c.id] = {stats: new Set(), expanded: false, selected: false}; });
+  ['cmdPanel','genPanel'].forEach(id => document.getElementById(id).style.display = 'block');
+  document.getElementById('outPanel').style.display = 'none';
+  renderCards(commanders);
+  updateBadge();
+}
+
+// ── RENDER CARDS ───────────────────────────────────────
+function renderCards(list) {
+  const el = document.getElementById('cardList');
+  if (!list.length) { el.innerHTML = '<div class="empty-state">// NO MATCH</div>'; return; }
+  el.innerHTML = list.map(c => buildCard(c)).join('');
+}
+
+function buildCard(c) {
+  const s = state[c.id];
+  const vCls = c.variance > 0 ? 'vp' : c.variance < 0 ? 'vn' : 'vz';
+  const vTxt = c.variance > 0 ? '+'+c.variance : c.variance;
+  const activeCls = s.selected ? 'active' : '';
+  const expandCls = s.expanded ? 'expanded' : '';
+
+  const statsHtml = Object.keys(STAT_META).map(k => {
+    const m = STAT_META[k];
+    const onCls = s.stats.has(k) ? 'on' : '';
+    return `<div class="sp ${m.cls} ${onCls}" onclick="toggleStat('${c.id}','${k}');event.stopPropagation()">
+      <div class="sp-icon">${m.icon}</div>
+      <div class="sp-label">${m.label}</div>
+    </div>`;
+  }).join('');
+
+  const infoTxt = s.stats.size === 2
+    ? `Stats: <span>${[...s.stats].map(x=>x[0].toUpperCase()+x.slice(1)).join(' + ')}</span> → <span>50 pts each</span>`
+    : s.stats.size === 1
+      ? `Select <span>1 more</span> stat`
+      : `Select <span>exactly 2</span> stats`;
+
+  return `<div class="cmd-card ${activeCls} ${expandCls}" id="card-${c.id}">
+    <div class="cc-head" onclick="toggleExpand('${c.id}')">
+      <div class="cc-check" onclick="toggleSelect('${c.id}');event.stopPropagation()">
+        <span class="cc-tick">✓</span>
+      </div>
+      <div class="cc-id">#${c.id}</div>
+      <div class="cc-name">${c.name}</div>
+      <div class="cc-var ${vCls}">${vTxt}</div>
+      <div class="cc-arrow">▼</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-stat-info" id="si-${c.id}">${infoTxt}</div>
+      <div class="stat-row">${statsHtml}</div>
+      <div class="cc-actions">
+        <button class="btn btn-cyan btn-sm" onclick="generateOne('${c.id}','set')">⚡ SET STATS</button>
+        <button class="btn btn-gold btn-sm" onclick="generateOne('${c.id}','max')">★ MAX</button>
+        <button class="btn btn-red btn-xs" onclick="clearStats('${c.id}')">↺ RESET STATS</button>
+      </div>
+      <div id="cwarn-${c.id}" class="warn-msg"></div>
+    </div>
+  </div>`;
+}
+
+function refreshCard(id) {
+  const c = commanders.find(x => x.id === id);
+  const el = document.getElementById('card-'+id);
+  if (!c || !el) return;
+  const tmp = document.createElement('div');
+  tmp.innerHTML = buildCard(c);
+  el.replaceWith(tmp.firstChild);
+}
+
+// ── INTERACTIONS ───────────────────────────────────────
+function toggleExpand(id) {
+  state[id].expanded = !state[id].expanded;
+  refreshCard(id);
+}
+
+function toggleSelect(id) {
+  state[id].selected = !state[id].selected;
+  refreshCard(id);
+  updateBadge();
+}
+
+function toggleStat(id, stat) {
+  const s = state[id].stats;
+  if (s.has(stat)) { s.delete(stat); }
+  else {
+    if (s.size >= 2) { const first = [...s][0]; s.delete(first); }
+    s.add(stat);
+  }
+  refreshCard(id);
+}
+
+function clearStats(id) {
+  state[id].stats.clear();
+  refreshCard(id);
+}
+
+function selectAll() {
+  visibleIds().forEach(id => { state[id].selected = true; });
+  rerenderVisible(); updateBadge();
+}
+function deselectAll() {
+  visibleIds().forEach(id => { state[id].selected = false; });
+  rerenderVisible(); updateBadge();
+}
+function collapseAll() {
+  Object.keys(state).forEach(id => { state[id].expanded = false; });
+  rerenderVisible();
+}
+
+function visibleIds() {
+  const q = document.getElementById('searchBox').value.toLowerCase();
+  return commanders
+    .filter(c => !q || c.name.toLowerCase().includes(q) || c.id.includes(q))
+    .map(c => c.id);
+}
+
+function rerenderVisible() {
+  const q = document.getElementById('searchBox').value.toLowerCase();
+  const list = commanders.filter(c => !q || c.name.toLowerCase().includes(q) || c.id.includes(q));
+  renderCards(list);
+}
+
+function filterCards() {
+  rerenderVisible();
+}
+
+function updateBadge() {
+  const n = Object.values(state).filter(s => s.selected).length;
+  document.getElementById('selBadge').textContent = n;
+  // Update config count
+  const configured = Object.entries(state).filter(([id,s]) => s.selected && s.stats.size === 2).length;
+  const sel = Object.values(state).filter(s => s.selected).length;
+  document.getElementById('configCount').textContent = sel ? `${configured}/${sel} configured` : '';
+}
+
+// ── GENERATE ───────────────────────────────────────────
+function buildSetCmd(id) {
+  const vals = [0,0,0,0];
+  state[id].stats.forEach(s => { vals[STAT_POS[s]] = 50; });
+  return `/setcommanderstats ${id} ${vals.join(' ')}`;
+}
+
+function generateOne(id, mode) {
+  const warn = document.getElementById('cwarn-'+id);
+  if (warn) warn.style.display = 'none';
+  if (mode === 'set' && state[id].stats.size !== 2) {
+    if (warn) { warn.textContent = '⚠ Select exactly 2 stats first.'; warn.style.display = 'block'; }
+    return;
+  }
+  const c = commanders.find(x => x.id === id);
+  const cmd = mode === 'set' ? buildSetCmd(id) : `/maxcommanders ${id}`;
+  appendOutput([{type: mode, cmd, name: c.name}]);
+}
+
+function generateAll(mode) {
+  const warn = document.getElementById('genWarn');
+  warn.style.display = 'none';
+  const selected = Object.entries(state).filter(([,s]) => s.selected);
+  if (!selected.length) {
+    warn.textContent = '⚠ No commanders selected. Click the checkboxes on each commander.';
+    warn.style.display = 'block'; return;
+  }
+  if (mode === 'set') {
+    const bad = selected.filter(([,s]) => s.stats.size !== 2);
+    if (bad.length) {
+      const names = bad.map(([id]) => commanders.find(c=>c.id===id)?.name).join(', ');
+      warn.textContent = `⚠ Missing stats for: ${names}`;
+      warn.style.display = 'block'; return;
+    }
+  }
+  const results = selected.map(([id]) => {
+    const c = commanders.find(x => x.id === id);
+    return {type: mode, cmd: mode==='set' ? buildSetCmd(id) : `/maxcommanders ${id}`, name: c.name};
+  });
+  appendOutput(results);
+}
+
+function appendOutput(results) {
+  const list = document.getElementById('outList');
+  const panel = document.getElementById('outPanel');
+  panel.style.display = 'block';
+  if (list.querySelector('.empty-state')) list.innerHTML = '';
+
+  results.forEach((r, i) => {
+    const safeCmd = r.cmd.replace(/'/g, "\\'");
+    const idx = Date.now() + i;
+    const div = document.createElement('div');
+    div.className = 'out-entry';
+    div.innerHTML = `
+      <span class="out-tag ${r.type==='set'?'tag-set':'tag-max'}">${r.type.toUpperCase()}</span>
+      <span class="out-cmd" id="oc-${idx}">${r.cmd}</span>
+      <span class="out-name">${r.name}</span>
+      <button class="copy-btn" id="cb-${idx}" onclick="copyOne('${idx}','${safeCmd}')">COPY</button>
+    `;
+    list.prepend(div);
+  });
+
+  const badge = document.getElementById('outBadge');
+  badge.textContent = list.querySelectorAll('.out-entry').length;
+  panel.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function copyOne(idx, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('cb-'+idx);
+    if (!btn) return;
+    btn.textContent = '✓ OK'; btn.classList.add('ok');
+    setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('ok'); }, 1400);
+  });
+}
+
+function copyAll() {
+  const cmds = [...document.querySelectorAll('.out-cmd')].map(e => e.textContent).join('\n');
+  navigator.clipboard.writeText(cmds).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✓ ALL COPIED';
+    setTimeout(() => btn.textContent = orig, 1600);
+  });
+}
+
+function clearAll() {
+  document.getElementById('bulletinInput').value = '';
+  document.getElementById('parseStatus').textContent = '';
+  ['cmdPanel','genPanel','outPanel'].forEach(id => document.getElementById(id).style.display = 'none');
+  commanders = []; state = {};
+}
+</script>
+</body>
+</html>
