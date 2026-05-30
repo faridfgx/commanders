@@ -270,7 +270,7 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
     <p style="font-size:15px;color:var(--text2);margin-bottom:14px;">Generate commands for all <strong style="color:var(--accent)">selected</strong> commanders at once using their individually configured stats.</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap;">
       <button class="btn btn-cyan" onclick="generateAll('set')">⚡ GENERATE SET STATS</button>
-      <button class="btn btn-gold" onclick="generateAll('max')">★ GENERATE MAX</button>
+     
     </div>
     <div id="genWarn" class="warn-msg"></div>
   </div>
@@ -375,7 +375,7 @@ function buildCard(c) {
       <div class="stat-row">${statsHtml}</div>
       <div class="cc-actions">
         <button class="btn btn-cyan btn-sm" onclick="generateOne('${c.id}','set')">⚡ SET STATS</button>
-        <button class="btn btn-gold btn-sm" onclick="generateOne('${c.id}','max')">★ MAX</button>
+        
         <button class="btn btn-red btn-xs" onclick="clearStats('${c.id}')">↺ RESET STATS</button>
       </div>
       <div id="cwarn-${c.id}" class="warn-msg"></div>
