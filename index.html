@@ -355,7 +355,7 @@ function buildCard(c) {
   }).join('');
 
   const infoTxt = s.stats.size === 2
-    ? `Stats: <span>${[...s.stats].map(x=>x[0].toUpperCase()+x.slice(1)).join(' + ')}</span> → <span>50 pts each</span>`
+    ? `Stats: <span>${[...s.stats].map(x=>x[0].toUpperCase()+x.slice(1)).join(' + ')}</span> → <span>5 pts each</span>`
     : s.stats.size === 1
       ? `Select <span>1 more</span> stat`
       : `Select <span>exactly 2</span> stats`;
