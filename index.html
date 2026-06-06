@@ -40,14 +40,12 @@ body::before{
 .scanline{position:fixed;inset:0;background:repeating-linear-gradient(to bottom,transparent 0,transparent 3px,rgba(0,0,0,0.1) 3px,rgba(0,0,0,0.1) 4px);pointer-events:none;z-index:1;}
 .wrap{max-width:1200px;margin:0 auto;padding:24px;position:relative;z-index:2;}
 
-/* HEADER */
 header{text-align:center;padding:32px 0 24px;border-bottom:1px solid var(--border);margin-bottom:30px;}
 header::before{content:'▶ TACTICAL COMMAND INTERFACE ◀';display:block;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);letter-spacing:4px;margin-bottom:10px;}
 h1{font-family:'Orbitron',monospace;font-size:clamp(22px,4vw,36px);font-weight:900;color:var(--accent);text-shadow:var(--glow);letter-spacing:3px;}
 h1 span{color:var(--accent2);}
 .subtitle{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2);margin-top:8px;letter-spacing:2px;}
 
-/* PANEL */
 .panel{background:var(--bg2);border:1px solid var(--border);border-radius:3px;overflow:hidden;position:relative;margin-bottom:22px;}
 .panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);}
 .panel-hd{background:var(--bg3);border-bottom:1px solid var(--border2);padding:13px 20px;display:flex;align-items:center;gap:10px;}
@@ -56,7 +54,6 @@ h1 span{color:var(--accent2);}
 .ph-title{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:3px;color:var(--accent);text-transform:uppercase;}
 .panel-body{padding:20px;}
 
-/* TEXTAREA */
 textarea{
   width:100%;background:var(--bg);border:1px solid var(--border);border-radius:3px;
   color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;
@@ -66,7 +63,6 @@ textarea{
 textarea:focus{border-color:var(--accent);box-shadow:0 0 0 1px rgba(0,212,255,0.1);}
 textarea::placeholder{color:var(--text2);opacity:.5;}
 
-/* BUTTONS */
 .btn{
   font-family:'Orbitron',monospace;font-size:12px;letter-spacing:2px;font-weight:700;
   padding:13px 26px;border:1px solid;border-radius:3px;cursor:pointer;
@@ -83,11 +79,12 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
 .btn-gold:hover{box-shadow:0 0 14px rgba(255,215,0,0.4);}
 .btn-green{background:transparent;color:var(--accent3);border-color:var(--accent3);}
 .btn-green:hover{box-shadow:0 0 14px rgba(57,255,20,0.4);}
+.btn-purple{background:transparent;color:var(--purple);border-color:var(--purple);}
+.btn-purple:hover{box-shadow:0 0 14px rgba(191,95,255,0.4);}
 .btn-sm{padding:8px 16px;font-size:11px;}
 .btn-xs{padding:5px 10px;font-size:10px;}
 .btn-row{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap;align-items:center;}
 
-/* SEARCH */
 .search-box{
   width:100%;background:var(--bg);border:1px solid var(--border);border-radius:3px;
   color:var(--text);font-family:'Share Tech Mono',monospace;font-size:14px;
@@ -96,12 +93,19 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
 .search-box:focus{border-color:var(--accent);}
 .search-box::placeholder{color:var(--text2);opacity:.5;}
 
-/* TOOLBAR */
 .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px;flex-wrap:wrap;}
 .toolbar-label{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);}
-.toolbar-btns{display:flex;gap:8px;}
+.toolbar-btns{display:flex;gap:8px;flex-wrap:wrap;}
 
-/* COMMANDER CARD — the main unit */
+/* PRESET ZONE */
+.preset-zone{
+  background:var(--bg3);border:1px solid var(--border2);border-radius:3px;
+  padding:14px 16px;margin-bottom:14px;
+}
+.preset-title{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text2);letter-spacing:2px;margin-bottom:10px;text-transform:uppercase;}
+.preset-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.preset-note{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text2);margin-top:8px;opacity:.6;}
+
 .cmd-card{
   background:var(--bg);border:1px solid var(--border2);border-radius:3px;
   margin-bottom:10px;overflow:hidden;transition:border-color .2s;
@@ -110,7 +114,6 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
 .cmd-card.active{border-color:var(--accent);background:rgba(0,212,255,0.03);}
 .cmd-card.active::before{content:'';display:block;height:2px;background:linear-gradient(90deg,var(--accent),transparent);}
 
-/* Card header row — always visible */
 .cc-head{
   display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;
   user-select:none;
@@ -130,11 +133,21 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
 .vn{color:var(--danger);background:rgba(255,51,68,0.08);border:1px solid rgba(255,51,68,0.2);}
 .vz{color:var(--text2);background:rgba(90,128,150,0.08);border:1px solid rgba(90,128,150,0.2);}
 
-/* Expand chevron */
+/* Ability badge on card header */
+.cc-ability{
+  font-family:'Share Tech Mono',monospace;font-size:10px;padding:2px 7px;border-radius:2px;
+  flex-shrink:0;letter-spacing:1px;text-transform:uppercase;
+}
+.ab-acc{color:#00d4ff;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.25);}
+.ab-dod{color:#ff6b35;background:rgba(255,107,53,0.1);border:1px solid rgba(255,107,53,0.25);}
+.ab-spd{color:#39ff14;background:rgba(57,255,20,0.1);border:1px solid rgba(57,255,20,0.25);}
+.ab-ele{color:#bf5fff;background:rgba(191,95,255,0.1);border:1px solid rgba(191,95,255,0.25);}
+.ab-multi{color:#ffd700;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.25);}
+.ab-none{color:var(--text2);background:rgba(90,128,150,0.08);border:1px solid rgba(90,128,150,0.2);}
+
 .cc-arrow{font-size:11px;color:var(--text2);transition:transform .2s;flex-shrink:0;}
 .cmd-card.expanded .cc-arrow{transform:rotate(180deg);}
 
-/* Card body — stat selectors, shown when expanded */
 .cc-body{
   border-top:1px solid var(--border2);padding:14px 16px 16px;
   display:none;
@@ -143,7 +156,6 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
 .cmd-card.expanded .cc-body{display:block;}
 @keyframes expandIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
 
-/* Stat picker inside each card */
 .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
 .sp{
   padding:12px 6px;border:1px solid var(--border);border-radius:3px;
@@ -155,14 +167,16 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
 .sp:hover{border-color:var(--sc,var(--accent));background:rgba(0,212,255,0.04);}
 .sp.on{border-color:var(--sc,var(--accent));background:rgba(0,212,255,0.07);}
 .sp.on .sp-label{color:var(--sc,var(--accent));}
+/* ability highlight ring */
+.sp.is-ability{box-shadow:inset 0 0 0 1px var(--sc,var(--accent)),0 0 6px rgba(0,212,255,0.2);}
 .sp-icon{font-size:18px;margin-bottom:4px;}
 .sp-label{font-family:'Orbitron',monospace;font-size:9px;letter-spacing:1px;color:var(--text2);text-transform:uppercase;transition:color .15s;}
+.sp-sub{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text2);opacity:.5;margin-top:2px;}
 .sp-acc{--sc:#00d4ff;}
 .sp-dod{--sc:#ff6b35;}
 .sp-spd{--sc:#39ff14;}
 .sp-ele{--sc:#bf5fff;}
 
-/* Card action buttons */
 .cc-actions{display:flex;gap:8px;flex-wrap:wrap;}
 .cc-stat-info{
   font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);
@@ -170,7 +184,6 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
 }
 .cc-stat-info span{color:var(--accent);}
 
-/* OUTPUT AREA */
 .out-list{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
 .out-list::-webkit-scrollbar{width:4px;}
 .out-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
@@ -183,7 +196,6 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
 @keyframes slideIn{from{opacity:0;transform:translateX(-8px);}to{opacity:1;transform:translateX(0);}}
 .out-tag{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;padding:3px 8px;border-radius:2px;flex-shrink:0;}
 .tag-set{color:var(--accent);background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.25);}
-.tag-max{color:var(--gold);background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.25);}
 .out-cmd{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--text);flex:1;word-break:break-all;}
 .out-name{font-size:13px;color:var(--text2);flex-shrink:0;}
 .copy-btn{
@@ -200,10 +212,8 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
 .badge-orange{background:var(--accent2);}
 .badge-green{background:var(--accent3);}
 .out-header-actions{display:flex;gap:10px;align-items:center;margin-left:auto;}
-.divider{border:none;border-top:1px solid var(--border2);margin:14px 0;}
 .parse-status{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2);}
 
-/* Responsive */
 @media(max-width:600px){
   .stat-row{grid-template-columns:repeat(2,1fr);}
   .cc-name{font-size:15px;}
@@ -248,6 +258,22 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
   </div>
   <div class="panel-body">
     <input class="search-box" id="searchBox" type="text" placeholder="🔍  Search by name or ID..." oninput="filterCards()">
+
+    <!-- PRESET ZONE -->
+    <div class="preset-zone">
+      <div class="preset-title">⚡ BULK STAT PRESETS — applies to all selected commanders</div>
+      <div class="preset-btns">
+        <button class="btn btn-cyan btn-sm" onclick="applyPreset('spd_acc')">SPD + ACC (all)</button>
+        <button class="btn btn-gold btn-sm" onclick="applyPreset('ability_smart')">ABILITY STAT (smart)</button>
+        <button class="btn btn-purple btn-sm" onclick="applyPreset('ability_only')">ABILITY + SPEED/ACC</button>
+      </div>
+      <div class="preset-note">
+        SPD+ACC → sets every selected commander to Speed + Accuracy<br>
+        ABILITY SMART → pairs each commander's ability stat with Speed (or Accuracy if ability=Speed)<br>
+        ABILITY+SPD/ACC → same as SMART; uses database lookup by commander name
+      </div>
+    </div>
+
     <div class="toolbar">
       <span class="toolbar-label">QUICK SELECT</span>
       <div class="toolbar-btns">
@@ -270,7 +296,6 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
     <p style="font-size:15px;color:var(--text2);margin-bottom:14px;">Generate commands for all <strong style="color:var(--accent)">selected</strong> commanders at once using their individually configured stats.</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap;">
       <button class="btn btn-cyan" onclick="generateAll('set')">⚡ GENERATE SET STATS</button>
-     
     </div>
     <div id="genWarn" class="warn-msg"></div>
   </div>
@@ -293,22 +318,180 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
   </div>
 </div>
 
-</div><!-- /wrap -->
+</div>
 
 <script>
-let commanders = [];
-// Per-commander state: { stats: Set, expanded: bool, selected: bool }
-let state = {};
+// ── COMMANDER DATABASE (ability stat lookup) ───────────────────────────────
+// procData index: 0=accuracy, 1=dodge, 2=speed, 3=electron
+// For procMode 3 (dual): procData = "primary:secondary", primary is the main ability stat
+// procMode 0 = no stat dependency
+// procMode 1 = all 4 stats
+const STAT_KEYS = ['accuracy','dodge','speed','electron'];
 
-const STAT_POS = {accuracy:0, dodge:1, speed:2, electron:3};
-const STAT_META = {
-  accuracy: {icon:'🎯', label:'Accuracy', cls:'sp-acc'},
-  dodge:    {icon:'❯❯❯❯', label:'Dodge',    cls:'sp-dod'},
-  speed:    {icon:'⚡', label:'Speed',    cls:'sp-spd'},
-  electron: {icon:'⚛️', label:'Electron', cls:'sp-ele'},
+const CMD_DB = {
+  // name (lowercase) -> primary ability stat(s), null if none
+  "angla":            ["dodge"],
+  "leo":              ["electron"],
+  "natiya":           ["speed"],
+  "reggie":           ["electron"],
+  "eveline":          ["accuracy"],
+  "stani":            ["accuracy","electron"],
+  "sofia":            ["speed"],
+  "jason":            ["electron"],
+  "maletiz":          ["dodge","electron"],
+  "nick":             ["dodge"],
+  "jerome":           ["accuracy"],
+  "aileen":           ["electron","speed"],
+  "alicia":           ["accuracy"],
+  "panis":            ["electron"],
+  "annata":           ["speed"],
+  "kelly":            ["speed"],
+  "rayllf":           ["speed"],
+  "donna":            ["speed"],
+  "sylva":            null,
+  "gastaf":           ["accuracy"],
+  "taude":            null,
+  "wayne":            ["accuracy"],
+  "sandora":          ["accuracy","speed"],
+  "raslin":           ["electron"],
+  "maxius":           ["accuracy"],
+  "penni":            ["accuracy"],
+  "motima":           ["accuracy"],
+  "ringel":           ["accuracy"],
+  "anna":             ["accuracy"],
+  "linda":            ["accuracy"],
+  "heloyce":          ["dodge"],
+  "shaba":            ["dodge"],
+  "nora":             ["accuracy","dodge"],
+  "mantie":           ["dodge"],
+  "vinna":            ["dodge"],
+  "singhri":          null,
+  "sylla":            ["dodge"],
+  "rayo":             null,
+  "bruce":            ["electron"],
+  "marcus":           ["accuracy","speed"],
+  "bart":             ["electron","speed"],
+  "lawrence":         ["accuracy"],
+  "evi":              ["accuracy"],
+  "tyren":            ["accuracy"],
+  "essido":           ["accuracy"],
+  "robert":           null,
+  "dilira":           ["speed"],
+  "hellen":           ["accuracy","electron"],
+  "todd":             ["accuracy"],
+  "rafia":            null,
+  "joseph":           null,
+  "carlos":           ["accuracy","speed"],
+  "jakar":            null,
+  "rocky":            null,
+  "andrew":           null,
+  "lynn":             null,
+  "miller":           null,
+  "cassius":          ["accuracy","dodge"],
+  "bain":             ["accuracy","dodge"],
+  "krina klaus":      ["dodge"],
+  "medusa":           ["dodge","electron"],
+  "venus":            ["dodge","speed"],
+  "circe":            ["accuracy","dodge"],
+  "callisto":         ["accuracy"],
+  "eva":              ["accuracy","electron"],
+  "javal":            null, // all 4
+  "slayer bael":      ["accuracy","dodge"],
+  "luna silvestri":   ["speed","dodge"],
+  "chrome dome":      ["accuracy","dodge"],
+  "shadow countess":  ["speed","dodge"],
+  "murphy lawson":    ["dodge","speed"],
+  // divine commanders - use their procData primary
+  "victory roar":     ["accuracy"],
+  "rays of destiny":  ["speed","dodge"],
+  "impending doom":   ["dodge","electron"],
+  "desolate prayers": ["accuracy","speed"],
+  "deadly duo":       ["accuracy"],
+  "frontline surge":  ["speed"],
+  "the twin torpedoes":["accuracy"],
+  "light and darkness":["speed"],
+  "kismet beams":     ["accuracy","speed"],
+  "fatal furies":     ["accuracy","speed"],
+  "indomitable duo":  ["dodge"],
+  "death from above": null,
+  "leech lurkers":    ["accuracy","speed"],
+  "eternal terrors":  ["accuracy","electron"],
+  "feral raptors":    ["accuracy","speed"],
+  "iron maidens":     ["speed","dodge"],
+  "fairy & fiend":    ["accuracy","speed"],
+  "suicidal sirens":  ["accuracy","electron"],
+  "wildfire":         ["accuracy","electron"],
+  "tactical wizards": ["dodge","electron"],
+  "fearmongers":      ["electron"],
+  "pernicious princes":null,
+  "summa cum laude":  ["accuracy","speed"],
+  "carbuncle cohort": ["speed","dodge"]
+  "enduring chorus":  ["speed"],
+  "the ravagers":     ["accuracy","electron"],
+  "rex scuta":        null,
+  "lurking light":    ["speed","dodge"],
+  "titan":            null,
+  "eschaton adventists":["accuracy","dodge"],
+  "hand of lelantos": ["accuracy"],
+  "hekatian witnesses":["accuracy","dodge"],
+  "dopplegangers":    ["speed","dodge"],
+  "erebus errants":   ["speed","dodge"],
+  "homeric hellions": ["dodge"],
+  "winter knights":   ["accuracy","dodge"],
+  "the heartless ones":["accuracy","dodge"],
+  "the forsaken":     ["accuracy","dodge"],
+  "the dictators":    null,
+  "dune enforcers":   ["dodge","speed"],
+  "technomancers":    ["accuracy","dodge"],
+  "queens of blades": ["accuracy","speed"],
+  "the pioneers":     null,
 };
 
-// ── PARSE ──────────────────────────────────────────────
+// Stat index mapping
+const STAT_POS = {accuracy:0, dodge:1, speed:2, electron:3};
+const STAT_META = {
+  accuracy: {icon:'🎯', label:'Accuracy', cls:'sp-acc', ab:'ACC', abCls:'ab-acc'},
+  dodge:    {icon:'❯❯❯❯', label:'Dodge',    cls:'sp-dod', ab:'DOD', abCls:'ab-dod'},
+  speed:    {icon:'⚡', label:'Speed',    cls:'sp-spd', ab:'SPD', abCls:'ab-spd'},
+  electron: {icon:'⚛️', label:'Electron', cls:'sp-ele', ab:'ELE', abCls:'ab-ele'},
+};
+
+let commanders = [];
+let state = {};
+
+// ── ABILITY LOOKUP ─────────────────────────────────────────────────────────
+function getAbilityStats(name) {
+  const key = name.toLowerCase().trim();
+  if (CMD_DB.hasOwnProperty(key)) return CMD_DB[key]; // null or array
+  // fuzzy: check if any db key is contained in the name
+  for (const k of Object.keys(CMD_DB)) {
+    if (key.includes(k) || k.includes(key)) return CMD_DB[k];
+  }
+  return undefined; // unknown
+}
+
+// Get the primary single stat to boost (first in list, or null)
+// Returns stat name string or null
+function getPrimaryAbilityStat(name) {
+  const stats = getAbilityStats(name);
+  if (!stats || stats.length === 0) return null;
+  return stats[0]; // primary
+}
+
+// Smart pairing:
+// - If commander has 2 known ability stats → use both directly
+// - If commander has 1 ability stat → pair with Speed (or Accuracy if ability IS Speed)
+// - If no ability stat → return null (caller defaults to spd+acc)
+function smartPair(name) {
+  const stats = getAbilityStats(name);
+  if (!stats || stats.length === 0) return null;
+  if (stats.length >= 2) return [stats[0], stats[1]]; // use both ability stats
+  const primary = stats[0];
+  const secondary = (primary === 'speed') ? 'accuracy' : 'speed';
+  return [primary, secondary];
+}
+
+// ── PARSE ──────────────────────────────────────────────────────────────────
 function parseBulletin() {
   const raw = document.getElementById('bulletinInput').value;
   const re = /\[Bulletin\]:\s*(\d+):\s*(.+?)\s*\(Variance:\s*([+-]?\d+)\)/g;
@@ -322,7 +505,6 @@ function parseBulletin() {
     return;
   }
   document.getElementById('parseStatus').textContent = `✓ ${commanders.length} commanders loaded`;
-  // Init state
   state = {};
   commanders.forEach(c => { state[c.id] = {stats: new Set(), expanded: false, selected: false}; });
   ['cmdPanel','genPanel'].forEach(id => document.getElementById(id).style.display = 'block');
@@ -331,7 +513,52 @@ function parseBulletin() {
   updateBadge();
 }
 
-// ── RENDER CARDS ───────────────────────────────────────
+// ── PRESET LOGIC ───────────────────────────────────────────────────────────
+function applyPreset(mode) {
+  const ids = Object.entries(state).filter(([,s]) => s.selected).map(([id]) => id);
+  if (!ids.length) {
+    showPresetWarn('⚠ No commanders selected. Select commanders first.');
+    return;
+  }
+
+  let unknowns = [];
+
+  ids.forEach(id => {
+    const c = commanders.find(x => x.id === id);
+    const s = state[id];
+
+    if (mode === 'spd_acc') {
+      s.stats = new Set(['speed', 'accuracy']);
+
+    } else if (mode === 'ability_smart' || mode === 'ability_only') {
+      const pair = smartPair(c.name);
+      if (pair) {
+        s.stats = new Set(pair);
+      } else {
+        // Unknown or no ability stat → fall back to spd+acc
+        s.stats = new Set(['speed', 'accuracy']);
+        unknowns.push(c.name);
+      }
+    }
+  });
+
+  rerenderVisible();
+  updateBadge();
+
+  if (unknowns.length) {
+    showPresetWarn(`⚠ No ability data for: ${unknowns.join(', ')} → defaulted to SPD+ACC`);
+  }
+}
+
+function showPresetWarn(msg) {
+  // Reuse genWarn
+  const w = document.getElementById('genWarn');
+  w.textContent = msg;
+  w.style.display = 'block';
+  setTimeout(() => { w.style.display = 'none'; }, 5000);
+}
+
+// ── RENDER ─────────────────────────────────────────────────────────────────
 function renderCards(list) {
   const el = document.getElementById('cardList');
   if (!list.length) { el.innerHTML = '<div class="empty-state">// NO MATCH</div>'; return; }
@@ -345,17 +572,35 @@ function buildCard(c) {
   const activeCls = s.selected ? 'active' : '';
   const expandCls = s.expanded ? 'expanded' : '';
 
+  // Ability badge
+  const abilityStats = getAbilityStats(c.name);
+  let abilityBadge = '';
+  if (abilityStats === null) {
+    abilityBadge = `<span class="cc-ability ab-none">NO ABILITY</span>`;
+  } else if (abilityStats === undefined) {
+    abilityBadge = `<span class="cc-ability ab-none">UNKNOWN</span>`;
+  } else if (abilityStats.length === 1) {
+    const m = STAT_META[abilityStats[0]];
+    abilityBadge = `<span class="cc-ability ${m.abCls}">${m.ab}</span>`;
+  } else {
+    const labels = abilityStats.map(s => STAT_META[s].ab).join('+');
+    abilityBadge = `<span class="cc-ability ab-multi">${labels}</span>`;
+  }
+
   const statsHtml = Object.keys(STAT_META).map(k => {
     const m = STAT_META[k];
     const onCls = s.stats.has(k) ? 'on' : '';
-    return `<div class="sp ${m.cls} ${onCls}" onclick="toggleStat('${c.id}','${k}');event.stopPropagation()">
+    // highlight if this is an ability stat
+    const isAbility = abilityStats && abilityStats.includes(k) ? 'is-ability' : '';
+    return `<div class="sp ${m.cls} ${onCls} ${isAbility}" onclick="toggleStat('${c.id}','${k}');event.stopPropagation()" style="${isAbility ? `--sc:${getComputedStyle(document.documentElement).getPropertyValue('--sc') || ''}` : ''}">
       <div class="sp-icon">${m.icon}</div>
       <div class="sp-label">${m.label}</div>
+      ${isAbility ? '<div class="sp-sub">ABILITY</div>' : ''}
     </div>`;
   }).join('');
 
   const infoTxt = s.stats.size === 2
-    ? `Stats: <span>${[...s.stats].map(x=>x[0].toUpperCase()+x.slice(1)).join(' + ')}</span> → <span>5 pts each</span>`
+    ? `Stats: <span>${[...s.stats].map(x=>x[0].toUpperCase()+x.slice(1)).join(' + ')}</span> → <span>50 pts each</span>`
     : s.stats.size === 1
       ? `Select <span>1 more</span> stat`
       : `Select <span>exactly 2</span> stats`;
@@ -367,6 +612,7 @@ function buildCard(c) {
       </div>
       <div class="cc-id">#${c.id}</div>
       <div class="cc-name">${c.name}</div>
+      ${abilityBadge}
       <div class="cc-var ${vCls}">${vTxt}</div>
       <div class="cc-arrow">▼</div>
     </div>
@@ -375,8 +621,8 @@ function buildCard(c) {
       <div class="stat-row">${statsHtml}</div>
       <div class="cc-actions">
         <button class="btn btn-cyan btn-sm" onclick="generateOne('${c.id}','set')">⚡ SET STATS</button>
-        
-        <button class="btn btn-red btn-xs" onclick="clearStats('${c.id}')">↺ RESET STATS</button>
+        <button class="btn btn-gold btn-xs" onclick="applySmartPresetOne('${c.id}')">↺ SMART PRESET</button>
+        <button class="btn btn-red btn-xs" onclick="clearStats('${c.id}')">✕ RESET</button>
       </div>
       <div id="cwarn-${c.id}" class="warn-msg"></div>
     </div>
@@ -392,18 +638,16 @@ function refreshCard(id) {
   el.replaceWith(tmp.firstChild);
 }
 
-// ── INTERACTIONS ───────────────────────────────────────
+// ── INTERACTIONS ───────────────────────────────────────────────────────────
 function toggleExpand(id) {
   state[id].expanded = !state[id].expanded;
   refreshCard(id);
 }
-
 function toggleSelect(id) {
   state[id].selected = !state[id].selected;
   refreshCard(id);
   updateBadge();
 }
-
 function toggleStat(id, stat) {
   const s = state[id].stats;
   if (s.has(stat)) { s.delete(stat); }
@@ -413,52 +657,47 @@ function toggleStat(id, stat) {
   }
   refreshCard(id);
 }
-
 function clearStats(id) {
   state[id].stats.clear();
   refreshCard(id);
 }
+function applySmartPresetOne(id) {
+  const c = commanders.find(x => x.id === id);
+  const pair = smartPair(c.name);
+  if (pair) {
+    state[id].stats = new Set(pair);
+  } else {
+    state[id].stats = new Set(['speed','accuracy']);
+    const w = document.getElementById('cwarn-'+id);
+    if (w) { w.textContent = '⚠ No ability data found — defaulted to SPD+ACC'; w.style.display='block'; setTimeout(()=>w.style.display='none',3000); }
+  }
+  refreshCard(id);
+}
 
-function selectAll() {
-  visibleIds().forEach(id => { state[id].selected = true; });
-  rerenderVisible(); updateBadge();
-}
-function deselectAll() {
-  visibleIds().forEach(id => { state[id].selected = false; });
-  rerenderVisible(); updateBadge();
-}
-function collapseAll() {
-  Object.keys(state).forEach(id => { state[id].expanded = false; });
-  rerenderVisible();
-}
+function selectAll() { visibleIds().forEach(id=>{state[id].selected=true;}); rerenderVisible(); updateBadge(); }
+function deselectAll() { visibleIds().forEach(id=>{state[id].selected=false;}); rerenderVisible(); updateBadge(); }
+function collapseAll() { Object.keys(state).forEach(id=>{state[id].expanded=false;}); rerenderVisible(); }
 
 function visibleIds() {
   const q = document.getElementById('searchBox').value.toLowerCase();
-  return commanders
-    .filter(c => !q || c.name.toLowerCase().includes(q) || c.id.includes(q))
-    .map(c => c.id);
+  return commanders.filter(c=>!q||c.name.toLowerCase().includes(q)||c.id.includes(q)).map(c=>c.id);
 }
-
 function rerenderVisible() {
   const q = document.getElementById('searchBox').value.toLowerCase();
-  const list = commanders.filter(c => !q || c.name.toLowerCase().includes(q) || c.id.includes(q));
+  const list = commanders.filter(c=>!q||c.name.toLowerCase().includes(q)||c.id.includes(q));
   renderCards(list);
 }
-
-function filterCards() {
-  rerenderVisible();
-}
+function filterCards() { rerenderVisible(); }
 
 function updateBadge() {
-  const n = Object.values(state).filter(s => s.selected).length;
+  const n = Object.values(state).filter(s=>s.selected).length;
   document.getElementById('selBadge').textContent = n;
-  // Update config count
-  const configured = Object.entries(state).filter(([id,s]) => s.selected && s.stats.size === 2).length;
-  const sel = Object.values(state).filter(s => s.selected).length;
+  const configured = Object.entries(state).filter(([,s])=>s.selected&&s.stats.size===2).length;
+  const sel = Object.values(state).filter(s=>s.selected).length;
   document.getElementById('configCount').textContent = sel ? `${configured}/${sel} configured` : '';
 }
 
-// ── GENERATE ───────────────────────────────────────────
+// ── GENERATE ───────────────────────────────────────────────────────────────
 function buildSetCmd(id) {
   const vals = [0,0,0,0];
   state[id].stats.forEach(s => { vals[STAT_POS[s]] = 50; });
@@ -468,34 +707,31 @@ function buildSetCmd(id) {
 function generateOne(id, mode) {
   const warn = document.getElementById('cwarn-'+id);
   if (warn) warn.style.display = 'none';
-  if (mode === 'set' && state[id].stats.size !== 2) {
-    if (warn) { warn.textContent = '⚠ Select exactly 2 stats first.'; warn.style.display = 'block'; }
+  if (state[id].stats.size !== 2) {
+    if (warn) { warn.textContent = '⚠ Select exactly 2 stats first.'; warn.style.display='block'; }
     return;
   }
-  const c = commanders.find(x => x.id === id);
-  const cmd = mode === 'set' ? buildSetCmd(id) : `/maxcommanders ${id}`;
-  appendOutput([{type: mode, cmd, name: c.name}]);
+  const c = commanders.find(x=>x.id===id);
+  appendOutput([{type:'set', cmd: buildSetCmd(id), name: c.name}]);
 }
 
 function generateAll(mode) {
   const warn = document.getElementById('genWarn');
   warn.style.display = 'none';
-  const selected = Object.entries(state).filter(([,s]) => s.selected);
+  const selected = Object.entries(state).filter(([,s])=>s.selected);
   if (!selected.length) {
-    warn.textContent = '⚠ No commanders selected. Click the checkboxes on each commander.';
-    warn.style.display = 'block'; return;
+    warn.textContent = '⚠ No commanders selected.';
+    warn.style.display='block'; return;
   }
-  if (mode === 'set') {
-    const bad = selected.filter(([,s]) => s.stats.size !== 2);
-    if (bad.length) {
-      const names = bad.map(([id]) => commanders.find(c=>c.id===id)?.name).join(', ');
-      warn.textContent = `⚠ Missing stats for: ${names}`;
-      warn.style.display = 'block'; return;
-    }
+  const bad = selected.filter(([,s])=>s.stats.size!==2);
+  if (bad.length) {
+    const names = bad.map(([id])=>commanders.find(c=>c.id===id)?.name).join(', ');
+    warn.textContent = `⚠ Missing stats for: ${names}`;
+    warn.style.display='block'; return;
   }
-  const results = selected.map(([id]) => {
-    const c = commanders.find(x => x.id === id);
-    return {type: mode, cmd: mode==='set' ? buildSetCmd(id) : `/maxcommanders ${id}`, name: c.name};
+  const results = selected.map(([id])=>{
+    const c = commanders.find(x=>x.id===id);
+    return {type:'set', cmd: buildSetCmd(id), name: c.name};
   });
   appendOutput(results);
 }
@@ -505,50 +741,47 @@ function appendOutput(results) {
   const panel = document.getElementById('outPanel');
   panel.style.display = 'block';
   if (list.querySelector('.empty-state')) list.innerHTML = '';
-
-  results.forEach((r, i) => {
-    const safeCmd = r.cmd.replace(/'/g, "\\'");
-    const idx = Date.now() + i;
+  results.forEach((r,i) => {
+    const safeCmd = r.cmd.replace(/'/g,"\\'");
+    const idx = Date.now()+i;
     const div = document.createElement('div');
     div.className = 'out-entry';
     div.innerHTML = `
-      <span class="out-tag ${r.type==='set'?'tag-set':'tag-max'}">${r.type.toUpperCase()}</span>
+      <span class="out-tag tag-set">SET</span>
       <span class="out-cmd" id="oc-${idx}">${r.cmd}</span>
       <span class="out-name">${r.name}</span>
       <button class="copy-btn" id="cb-${idx}" onclick="copyOne('${idx}','${safeCmd}')">COPY</button>
     `;
     list.prepend(div);
   });
-
-  const badge = document.getElementById('outBadge');
-  badge.textContent = list.querySelectorAll('.out-entry').length;
-  panel.scrollIntoView({behavior:'smooth', block:'start'});
+  document.getElementById('outBadge').textContent = list.querySelectorAll('.out-entry').length;
+  panel.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function copyOne(idx, text) {
-  navigator.clipboard.writeText(text).then(() => {
+  navigator.clipboard.writeText(text).then(()=>{
     const btn = document.getElementById('cb-'+idx);
     if (!btn) return;
-    btn.textContent = '✓ OK'; btn.classList.add('ok');
-    setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('ok'); }, 1400);
+    btn.textContent='✓ OK'; btn.classList.add('ok');
+    setTimeout(()=>{btn.textContent='COPY';btn.classList.remove('ok');},1400);
   });
 }
 
 function copyAll() {
-  const cmds = [...document.querySelectorAll('.out-cmd')].map(e => e.textContent).join('\n');
-  navigator.clipboard.writeText(cmds).then(() => {
+  const cmds = [...document.querySelectorAll('.out-cmd')].map(e=>e.textContent).join('\n');
+  navigator.clipboard.writeText(cmds).then(()=>{
     const btn = event.target;
     const orig = btn.textContent;
-    btn.textContent = '✓ ALL COPIED';
-    setTimeout(() => btn.textContent = orig, 1600);
+    btn.textContent='✓ ALL COPIED';
+    setTimeout(()=>btn.textContent=orig,1600);
   });
 }
 
 function clearAll() {
-  document.getElementById('bulletinInput').value = '';
-  document.getElementById('parseStatus').textContent = '';
-  ['cmdPanel','genPanel','outPanel'].forEach(id => document.getElementById(id).style.display = 'none');
-  commanders = []; state = {};
+  document.getElementById('bulletinInput').value='';
+  document.getElementById('parseStatus').textContent='';
+  ['cmdPanel','genPanel','outPanel'].forEach(id=>document.getElementById(id).style.display='none');
+  commanders=[]; state={};
 }
 </script>
 </body>
