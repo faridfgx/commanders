@@ -22,6 +22,9 @@
   --gold: #ffd700;
   --glow: 0 0 14px rgba(0,212,255,0.45);
   --glow2: 0 0 14px rgba(255,107,53,0.45);
+  --copied-bg: rgba(255,215,0,0.07);
+  --copied-border: rgba(255,215,0,0.35);
+  --copied-text: #ffd700;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{
@@ -97,7 +100,6 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
 .toolbar-label{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);}
 .toolbar-btns{display:flex;gap:8px;flex-wrap:wrap;}
 
-/* PRESET ZONE */
 .preset-zone{
   background:var(--bg3);border:1px solid var(--border2);border-radius:3px;
   padding:14px 16px;margin-bottom:14px;
@@ -133,7 +135,6 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
 .vn{color:var(--danger);background:rgba(255,51,68,0.08);border:1px solid rgba(255,51,68,0.2);}
 .vz{color:var(--text2);background:rgba(90,128,150,0.08);border:1px solid rgba(90,128,150,0.2);}
 
-/* Ability badge on card header */
 .cc-ability{
   font-family:'Share Tech Mono',monospace;font-size:10px;padding:2px 7px;border-radius:2px;
   flex-shrink:0;letter-spacing:1px;text-transform:uppercase;
@@ -167,7 +168,6 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
 .sp:hover{border-color:var(--sc,var(--accent));background:rgba(0,212,255,0.04);}
 .sp.on{border-color:var(--sc,var(--accent));background:rgba(0,212,255,0.07);}
 .sp.on .sp-label{color:var(--sc,var(--accent));}
-/* ability highlight ring */
 .sp.is-ability{box-shadow:inset 0 0 0 1px var(--sc,var(--accent)),0 0 6px rgba(0,212,255,0.2);}
 .sp-icon{font-size:18px;margin-bottom:4px;}
 .sp-label{font-family:'Orbitron',monospace;font-size:9px;letter-spacing:1px;color:var(--text2);text-transform:uppercase;transition:color .15s;}
@@ -184,19 +184,38 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
 }
 .cc-stat-info span{color:var(--accent);}
 
+/* OUTPUT LIST */
 .out-list{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
 .out-list::-webkit-scrollbar{width:4px;}
 .out-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+
 .out-entry{
   display:flex;align-items:center;gap:10px;
   background:var(--bg);border:1px solid var(--border2);border-radius:3px;
   padding:12px 16px;animation:slideIn .2s ease;
+  transition:background .25s, border-color .25s;
 }
 .out-entry:hover{border-color:var(--border);}
+
+/* COPIED STATE — gold tint so you know it's done */
+.out-entry.was-copied{
+  background: var(--copied-bg);
+  border-color: var(--copied-border);
+}
+.out-entry.was-copied .out-cmd{
+  color: var(--copied-text);
+  opacity: 0.7;
+}
+.out-entry.was-copied .out-tag{
+  color: var(--gold);
+  background: rgba(255,215,0,0.08);
+  border-color: rgba(255,215,0,0.25);
+}
+
 @keyframes slideIn{from{opacity:0;transform:translateX(-8px);}to{opacity:1;transform:translateX(0);}}
-.out-tag{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;padding:3px 8px;border-radius:2px;flex-shrink:0;}
+.out-tag{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;padding:3px 8px;border-radius:2px;flex-shrink:0;transition:color .25s,background .25s,border-color .25s;}
 .tag-set{color:var(--accent);background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.25);}
-.out-cmd{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--text);flex:1;word-break:break-all;}
+.out-cmd{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--text);flex:1;word-break:break-all;transition:color .25s,opacity .25s;}
 .out-name{font-size:13px;color:var(--text2);flex-shrink:0;}
 .copy-btn{
   background:transparent;border:1px solid var(--border);border-radius:2px;
@@ -206,6 +225,7 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
 }
 .copy-btn:hover{border-color:var(--accent);color:var(--accent);}
 .copy-btn.ok{border-color:var(--accent3);color:var(--accent3);}
+
 .empty-state{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--text2);text-align:center;padding:36px;opacity:.45;}
 .warn-msg{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--accent2);padding:9px 14px;border:1px solid rgba(255,107,53,0.3);border-radius:3px;background:rgba(255,107,53,0.06);margin-top:10px;display:none;}
 .badge{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:var(--bg);font-family:'Orbitron',monospace;font-size:10px;font-weight:900;padding:2px 8px;border-radius:20px;min-width:24px;}
@@ -213,6 +233,15 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
 .badge-green{background:var(--accent3);}
 .out-header-actions{display:flex;gap:10px;align-items:center;margin-left:auto;}
 .parse-status{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2);}
+
+/* copied legend hint */
+.copied-legend{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:var(--gold);opacity:.6;
+  padding:6px 0 2px;
+  display:none;
+}
+.copied-legend.visible{display:block;}
 
 @media(max-width:600px){
   .stat-row{grid-template-columns:repeat(2,1fr);}
@@ -259,7 +288,6 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
   <div class="panel-body">
     <input class="search-box" id="searchBox" type="text" placeholder="🔍  Search by name or ID..." oninput="filterCards()">
 
-    <!-- PRESET ZONE -->
     <div class="preset-zone">
       <div class="preset-title">⚡ BULK STAT PRESETS — applies to all selected commanders</div>
       <div class="preset-btns">
@@ -312,6 +340,7 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
     </div>
   </div>
   <div class="panel-body">
+    <div id="copiedLegend" class="copied-legend">■ gold = already copied</div>
     <div class="out-list" id="outList">
       <div class="empty-state">// AWAITING COMMAND GENERATION</div>
     </div>
@@ -321,133 +350,55 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
 </div>
 
 <script>
-// ── COMMANDER DATABASE (ability stat lookup) ───────────────────────────────
-// procData index: 0=accuracy, 1=dodge, 2=speed, 3=electron
-// For procMode 3 (dual): procData = "primary:secondary", primary is the main ability stat
-// procMode 0 = no stat dependency
-// procMode 1 = all 4 stats
+// ── COMMANDER DATABASE ─────────────────────────────────────────────────────
 const STAT_KEYS = ['accuracy','dodge','speed','electron'];
 
 const CMD_DB = {
-  // name (lowercase) -> primary ability stat(s), null if none
-  "angla":            ["dodge"],
-  "leo":              ["electron"],
-  "natiya":           ["speed"],
-  "reggie":           ["electron"],
-  "eveline":          ["accuracy"],
-  "stani":            ["accuracy","electron"],
-  "sofia":            ["speed"],
-  "jason":            ["electron"],
-  "maletiz":          ["dodge","electron"],
-  "nick":             ["dodge"],
-  "jerome":           ["accuracy"],
-  "aileen":           ["electron","speed"],
-  "alicia":           ["accuracy"],
-  "panis":            ["electron"],
-  "annata":           ["speed"],
-  "kelly":            ["speed"],
-  "rayllf":           ["speed"],
-  "donna":            ["speed"],
-  "sylva":            null,
-  "gastaf":           ["accuracy"],
-  "taude":            null,
-  "wayne":            ["accuracy"],
-  "sandora":          ["accuracy","speed"],
-  "raslin":           ["electron"],
-  "maxius":           ["accuracy"],
-  "penni":            ["accuracy"],
-  "motima":           ["accuracy"],
-  "ringel":           ["accuracy"],
-  "anna":             ["accuracy"],
-  "linda":            ["accuracy"],
-  "heloyce":          ["dodge"],
-  "shaba":            ["dodge"],
-  "nora":             ["accuracy","dodge"],
-  "mantie":           ["dodge"],
-  "vinna":            ["dodge"],
-  "singhri":          null,
-  "sylla":            ["dodge"],
-  "rayo":             null,
-  "bruce":            ["electron"],
-  "marcus":           ["accuracy","speed"],
-  "bart":             ["electron","speed"],
-  "lawrence":         ["accuracy"],
-  "evi":              ["accuracy"],
-  "tyren":            ["accuracy"],
-  "essido":           ["accuracy"],
-  "robert":           null,
-  "dilira":           ["speed"],
-  "hellen":           ["accuracy","electron"],
-  "todd":             ["accuracy"],
-  "rafia":            null,
-  "joseph":           null,
-  "carlos":           ["accuracy","speed"],
-  "jakar":            null,
-  "rocky":            null,
-  "andrew":           null,
-  "lynn":             null,
-  "miller":           null,
-  "cassius":          ["accuracy","dodge"],
-  "bain":             ["accuracy","dodge"],
-  "krina klaus":      ["dodge"],
-  "medusa":           ["dodge","electron"],
-  "venus":            ["dodge","speed"],
-  "circe":            ["accuracy","dodge"],
-  "callisto":         ["accuracy"],
-  "eva":              ["accuracy","electron"],
-  "javal":            null, // all 4
-  "slayer bael":      ["accuracy","dodge"],
-  "luna silvestri":   ["speed","dodge"],
-  "chrome dome":      ["accuracy","dodge"],
-  "shadow countess":  ["speed","dodge"],
-  "murphy lawson":    ["dodge","speed"],
-  // divine commanders - use their procData primary
-  "victory roar":     ["accuracy"],
-  "rays of destiny":  ["speed","dodge"],
-  "impending doom":   ["dodge","electron"],
-  "desolate prayers": ["accuracy","speed"],
-  "deadly duo":       ["accuracy"],
-  "frontline surge":  ["speed"],
-  "the twin torpedoes":["accuracy"],
-  "light and darkness":["speed"],
-  "kismet beams":     ["accuracy","speed"],
-  "fatal furies":     ["accuracy","speed"],
-  "indomitable duo":  ["dodge"],
-  "death from above": null,
-  "leech lurkers":    ["accuracy","speed"],
-  "eternal terrors":  ["accuracy","electron"],
-  "feral raptors":    ["accuracy","speed"],
-  "iron maidens":     ["speed","dodge"],
-  "fairy & fiend":    ["accuracy","speed"],
-  "suicidal sirens":  ["accuracy","electron"],
-  "wildfire":         ["accuracy","electron"],
-  "tactical wizards": ["dodge","electron"],
-  "fearmongers":      ["electron"],
-  "pernicious princes":null,
-  "summa cum laude":  ["accuracy","speed"],
-  "carbuncle cohort": ["speed","dodge"],
-  "enduring chorus":  ["speed"],
-  "the ravagers":     ["accuracy","electron"],
-  "rex scuta":        null,
-  "lurking light":    ["speed","dodge"],
-  "titan":            null,
-  "eschaton adventists":["accuracy","dodge"],
-  "hand of lelantos": ["accuracy"],
-  "hekatian witnesses":["accuracy","dodge"],
-  "dopplegangers":    ["speed","dodge"],
-  "erebus errants":   ["speed","dodge"],
-  "homeric hellions": ["dodge"],
-  "winter knights":   ["accuracy","dodge"],
-  "the heartless ones":["accuracy","dodge"],
-  "the forsaken":     ["accuracy","dodge"],
-  "the dictators":    null,
-  "dune enforcers":   ["dodge","speed"],
-  "technomancers":    ["accuracy","dodge"],
-  "queens of blades": ["accuracy","speed"],
-  "the pioneers":     null,
+  "angla":["dodge"],"leo":["electron"],"natiya":["speed"],"reggie":["electron"],
+  "eveline":["accuracy"],"stani":["accuracy","electron"],"sofia":["speed"],
+  "jason":["electron"],"maletiz":["dodge","electron"],"nick":["dodge"],
+  "jerome":["accuracy"],"aileen":["electron","speed"],"alicia":["accuracy"],
+  "panis":["electron"],"annata":["speed"],"kelly":["speed"],"rayllf":["speed"],
+  "donna":["speed"],"sylva":null,"gastaf":["accuracy"],"taude":null,
+  "wayne":["accuracy"],"sandora":["accuracy","speed"],"raslin":["electron"],
+  "maxius":["accuracy"],"penni":["accuracy"],"motima":["accuracy"],
+  "ringel":["accuracy"],"anna":["accuracy"],"linda":["accuracy"],
+  "heloyce":["dodge"],"shaba":["dodge"],"nora":["accuracy","dodge"],
+  "mantie":["dodge"],"vinna":["dodge"],"singhri":null,"sylla":["dodge"],
+  "rayo":null,"bruce":["electron"],"marcus":["accuracy","speed"],
+  "bart":["electron","speed"],"lawrence":["accuracy"],"evi":["accuracy"],
+  "tyren":["accuracy"],"essido":["accuracy"],"robert":null,"dilira":["speed"],
+  "hellen":["accuracy","electron"],"todd":["accuracy"],"rafia":null,
+  "joseph":null,"carlos":["accuracy","speed"],"jakar":null,"rocky":null,
+  "andrew":null,"lynn":null,"miller":null,"cassius":["accuracy","dodge"],
+  "bain":["accuracy","dodge"],"krina klaus":["dodge"],"medusa":["dodge","electron"],
+  "venus":["dodge","speed"],"circe":["accuracy","dodge"],"callisto":["accuracy"],
+  "eva":["accuracy","electron"],"javal":null,"slayer bael":["accuracy","dodge"],
+  "luna silvestri":["speed","dodge"],"chrome dome":["accuracy","dodge"],
+  "shadow countess":["speed","dodge"],"murphy lawson":["dodge","speed"],
+  "victory roar":["accuracy"],"rays of destiny":["speed","dodge"],
+  "impending doom":["dodge","electron"],"desolate prayers":["accuracy","speed"],
+  "deadly duo":["accuracy"],"frontline surge":["speed"],
+  "the twin torpedoes":["accuracy"],"light and darkness":["speed"],
+  "kismet beams":["accuracy","speed"],"fatal furies":["accuracy","speed"],
+  "indomitable duo":["dodge"],"death from above":null,"leech lurkers":["accuracy","speed"],
+  "eternal terrors":["accuracy","electron"],"feral raptors":["accuracy","speed"],
+  "iron maidens":["speed","dodge"],"fairy & fiend":["accuracy","speed"],
+  "suicidal sirens":["accuracy","electron"],"wildfire":["accuracy","electron"],
+  "tactical wizards":["dodge","electron"],"fearmongers":["electron"],
+  "pernicious princes":null,"summa cum laude":["accuracy","speed"],
+  "carbuncle cohort":["speed","dodge"],"enduring chorus":["speed"],
+  "the ravagers":["accuracy","electron"],"rex scuta":null,
+  "lurking light":["speed","dodge"],"titan":null,
+  "eschaton adventists":["accuracy","dodge"],"hand of lelantos":["accuracy"],
+  "hekatian witnesses":["accuracy","dodge"],"dopplegangers":["speed","dodge"],
+  "erebus errants":["speed","dodge"],"homeric hellions":["dodge"],
+  "winter knights":["accuracy","dodge"],"the heartless ones":["accuracy","dodge"],
+  "the forsaken":["accuracy","dodge"],"the dictators":null,
+  "dune enforcers":["dodge","speed"],"technomancers":["accuracy","dodge"],
+  "queens of blades":["accuracy","speed"],"the pioneers":null,
 };
 
-// Stat index mapping
 const STAT_POS = {accuracy:0, dodge:1, speed:2, electron:3};
 const STAT_META = {
   accuracy: {icon:'🎯', label:'Accuracy', cls:'sp-acc', ab:'ACC', abCls:'ab-acc'},
@@ -462,30 +413,17 @@ let state = {};
 // ── ABILITY LOOKUP ─────────────────────────────────────────────────────────
 function getAbilityStats(name) {
   const key = name.toLowerCase().trim();
-  if (CMD_DB.hasOwnProperty(key)) return CMD_DB[key]; // null or array
-  // fuzzy: check if any db key is contained in the name
+  if (CMD_DB.hasOwnProperty(key)) return CMD_DB[key];
   for (const k of Object.keys(CMD_DB)) {
     if (key.includes(k) || k.includes(key)) return CMD_DB[k];
   }
-  return undefined; // unknown
+  return undefined;
 }
 
-// Get the primary single stat to boost (first in list, or null)
-// Returns stat name string or null
-function getPrimaryAbilityStat(name) {
-  const stats = getAbilityStats(name);
-  if (!stats || stats.length === 0) return null;
-  return stats[0]; // primary
-}
-
-// Smart pairing:
-// - If commander has 2 known ability stats → use both directly
-// - If commander has 1 ability stat → pair with Speed (or Accuracy if ability IS Speed)
-// - If no ability stat → return null (caller defaults to spd+acc)
 function smartPair(name) {
   const stats = getAbilityStats(name);
   if (!stats || stats.length === 0) return null;
-  if (stats.length >= 2) return [stats[0], stats[1]]; // use both ability stats
+  if (stats.length >= 2) return [stats[0], stats[1]];
   const primary = stats[0];
   const secondary = (primary === 'speed') ? 'accuracy' : 'speed';
   return [primary, secondary];
@@ -508,7 +446,11 @@ function parseBulletin() {
   state = {};
   commanders.forEach(c => { state[c.id] = {stats: new Set(), expanded: false, selected: false}; });
   ['cmdPanel','genPanel'].forEach(id => document.getElementById(id).style.display = 'block');
+  // Hide output panel on new parse — clears old results
   document.getElementById('outPanel').style.display = 'none';
+  document.getElementById('outList').innerHTML = '<div class="empty-state">// AWAITING COMMAND GENERATION</div>';
+  document.getElementById('outBadge').textContent = '0';
+  document.getElementById('copiedLegend').classList.remove('visible');
   renderCards(commanders);
   updateBadge();
 }
@@ -516,45 +458,27 @@ function parseBulletin() {
 // ── PRESET LOGIC ───────────────────────────────────────────────────────────
 function applyPreset(mode) {
   const ids = Object.entries(state).filter(([,s]) => s.selected).map(([id]) => id);
-  if (!ids.length) {
-    showPresetWarn('⚠ No commanders selected. Select commanders first.');
-    return;
-  }
-
+  if (!ids.length) { showPresetWarn('⚠ No commanders selected. Select commanders first.'); return; }
   let unknowns = [];
-
   ids.forEach(id => {
     const c = commanders.find(x => x.id === id);
     const s = state[id];
-
     if (mode === 'spd_acc') {
       s.stats = new Set(['speed', 'accuracy']);
-
     } else if (mode === 'ability_smart' || mode === 'ability_only') {
       const pair = smartPair(c.name);
-      if (pair) {
-        s.stats = new Set(pair);
-      } else {
-        // Unknown or no ability stat → fall back to spd+acc
-        s.stats = new Set(['speed', 'accuracy']);
-        unknowns.push(c.name);
-      }
+      if (pair) { s.stats = new Set(pair); }
+      else { s.stats = new Set(['speed', 'accuracy']); unknowns.push(c.name); }
     }
   });
-
   rerenderVisible();
   updateBadge();
-
-  if (unknowns.length) {
-    showPresetWarn(`⚠ No ability data for: ${unknowns.join(', ')} → defaulted to SPD+ACC`);
-  }
+  if (unknowns.length) showPresetWarn(`⚠ No ability data for: ${unknowns.join(', ')} → defaulted to SPD+ACC`);
 }
 
 function showPresetWarn(msg) {
-  // Reuse genWarn
   const w = document.getElementById('genWarn');
-  w.textContent = msg;
-  w.style.display = 'block';
+  w.textContent = msg; w.style.display = 'block';
   setTimeout(() => { w.style.display = 'none'; }, 5000);
 }
 
@@ -572,7 +496,6 @@ function buildCard(c) {
   const activeCls = s.selected ? 'active' : '';
   const expandCls = s.expanded ? 'expanded' : '';
 
-  // Ability badge
   const abilityStats = getAbilityStats(c.name);
   let abilityBadge = '';
   if (abilityStats === null) {
@@ -580,30 +503,27 @@ function buildCard(c) {
   } else if (abilityStats === undefined) {
     abilityBadge = `<span class="cc-ability ab-none">UNKNOWN</span>`;
   } else if (abilityStats.length === 1) {
-    const m = STAT_META[abilityStats[0]];
-    abilityBadge = `<span class="cc-ability ${m.abCls}">${m.ab}</span>`;
+    const meta = STAT_META[abilityStats[0]];
+    abilityBadge = `<span class="cc-ability ${meta.abCls}">${meta.ab}</span>`;
   } else {
-    const labels = abilityStats.map(s => STAT_META[s].ab).join('+');
+    const labels = abilityStats.map(st => STAT_META[st].ab).join('+');
     abilityBadge = `<span class="cc-ability ab-multi">${labels}</span>`;
   }
 
   const statsHtml = Object.keys(STAT_META).map(k => {
-    const m = STAT_META[k];
+    const meta = STAT_META[k];
     const onCls = s.stats.has(k) ? 'on' : '';
-    // highlight if this is an ability stat
     const isAbility = abilityStats && abilityStats.includes(k) ? 'is-ability' : '';
-    return `<div class="sp ${m.cls} ${onCls} ${isAbility}" onclick="toggleStat('${c.id}','${k}');event.stopPropagation()" style="${isAbility ? `--sc:${getComputedStyle(document.documentElement).getPropertyValue('--sc') || ''}` : ''}">
-      <div class="sp-icon">${m.icon}</div>
-      <div class="sp-label">${m.label}</div>
+    return `<div class="sp ${meta.cls} ${onCls} ${isAbility}" onclick="toggleStat('${c.id}','${k}');event.stopPropagation()">
+      <div class="sp-icon">${meta.icon}</div>
+      <div class="sp-label">${meta.label}</div>
       ${isAbility ? '<div class="sp-sub">ABILITY</div>' : ''}
     </div>`;
   }).join('');
 
   const infoTxt = s.stats.size === 2
     ? `Stats: <span>${[...s.stats].map(x=>x[0].toUpperCase()+x.slice(1)).join(' + ')}</span> → <span>50 pts each</span>`
-    : s.stats.size === 1
-      ? `Select <span>1 more</span> stat`
-      : `Select <span>exactly 2</span> stats`;
+    : s.stats.size === 1 ? `Select <span>1 more</span> stat` : `Select <span>exactly 2</span> stats`;
 
   return `<div class="cmd-card ${activeCls} ${expandCls}" id="card-${c.id}">
     <div class="cc-head" onclick="toggleExpand('${c.id}')">
@@ -639,34 +559,20 @@ function refreshCard(id) {
 }
 
 // ── INTERACTIONS ───────────────────────────────────────────────────────────
-function toggleExpand(id) {
-  state[id].expanded = !state[id].expanded;
-  refreshCard(id);
-}
-function toggleSelect(id) {
-  state[id].selected = !state[id].selected;
-  refreshCard(id);
-  updateBadge();
-}
+function toggleExpand(id) { state[id].expanded = !state[id].expanded; refreshCard(id); }
+function toggleSelect(id) { state[id].selected = !state[id].selected; refreshCard(id); updateBadge(); }
 function toggleStat(id, stat) {
   const s = state[id].stats;
   if (s.has(stat)) { s.delete(stat); }
-  else {
-    if (s.size >= 2) { const first = [...s][0]; s.delete(first); }
-    s.add(stat);
-  }
+  else { if (s.size >= 2) { const first = [...s][0]; s.delete(first); } s.add(stat); }
   refreshCard(id);
 }
-function clearStats(id) {
-  state[id].stats.clear();
-  refreshCard(id);
-}
+function clearStats(id) { state[id].stats.clear(); refreshCard(id); }
 function applySmartPresetOne(id) {
   const c = commanders.find(x => x.id === id);
   const pair = smartPair(c.name);
-  if (pair) {
-    state[id].stats = new Set(pair);
-  } else {
+  if (pair) { state[id].stats = new Set(pair); }
+  else {
     state[id].stats = new Set(['speed','accuracy']);
     const w = document.getElementById('cwarn-'+id);
     if (w) { w.textContent = '⚠ No ability data found — defaulted to SPD+ACC'; w.style.display='block'; setTimeout(()=>w.style.display='none',3000); }
@@ -712,17 +618,14 @@ function generateOne(id, mode) {
     return;
   }
   const c = commanders.find(x=>x.id===id);
-  appendOutput([{type:'set', cmd: buildSetCmd(id), name: c.name}]);
+  replaceOutput([{type:'set', cmd: buildSetCmd(id), name: c.name}]);
 }
 
 function generateAll(mode) {
   const warn = document.getElementById('genWarn');
   warn.style.display = 'none';
   const selected = Object.entries(state).filter(([,s])=>s.selected);
-  if (!selected.length) {
-    warn.textContent = '⚠ No commanders selected.';
-    warn.style.display='block'; return;
-  }
+  if (!selected.length) { warn.textContent = '⚠ No commanders selected.'; warn.style.display='block'; return; }
   const bad = selected.filter(([,s])=>s.stats.size!==2);
   if (bad.length) {
     const names = bad.map(([id])=>commanders.find(c=>c.id===id)?.name).join(', ');
@@ -733,55 +636,71 @@ function generateAll(mode) {
     const c = commanders.find(x=>x.id===id);
     return {type:'set', cmd: buildSetCmd(id), name: c.name};
   });
-  appendOutput(results);
+  replaceOutput(results);
 }
 
-function appendOutput(results) {
+// REPLACE (not append) — clears old output then writes fresh
+function replaceOutput(results) {
   const list = document.getElementById('outList');
   const panel = document.getElementById('outPanel');
   panel.style.display = 'block';
-  if (list.querySelector('.empty-state')) list.innerHTML = '';
-  results.forEach((r,i) => {
+  // Clear everything first
+  list.innerHTML = '';
+  document.getElementById('copiedLegend').classList.remove('visible');
+
+  results.forEach((r, i) => {
     const safeCmd = r.cmd.replace(/'/g,"\\'");
-    const idx = Date.now()+i;
+    const idx = Date.now() + i;
     const div = document.createElement('div');
     div.className = 'out-entry';
+    div.id = 'entry-' + idx;
     div.innerHTML = `
       <span class="out-tag tag-set">SET</span>
-      <span class="out-cmd" id="oc-${idx}">${r.cmd}</span>
+      <span class="out-cmd">${r.cmd}</span>
       <span class="out-name">${r.name}</span>
-      <button class="copy-btn" id="cb-${idx}" onclick="copyOne('${idx}','${safeCmd}')">COPY</button>
+      <button class="copy-btn" onclick="copyOne(this, '${safeCmd}')">COPY</button>
     `;
-    list.prepend(div);
+    list.appendChild(div);
   });
-  document.getElementById('outBadge').textContent = list.querySelectorAll('.out-entry').length;
-  panel.scrollIntoView({behavior:'smooth',block:'start'});
+
+  document.getElementById('outBadge').textContent = results.length;
+  panel.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
-function copyOne(idx, text) {
-  navigator.clipboard.writeText(text).then(()=>{
-    const btn = document.getElementById('cb-'+idx);
-    if (!btn) return;
-    btn.textContent='✓ OK'; btn.classList.add('ok');
-    setTimeout(()=>{btn.textContent='COPY';btn.classList.remove('ok');},1400);
+// Copy a single line and mark it gold
+function copyOne(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const entry = btn.closest('.out-entry');
+    entry.classList.add('was-copied');
+    btn.textContent = '✓ OK';
+    btn.classList.add('ok');
+    // Show legend hint
+    document.getElementById('copiedLegend').classList.add('visible');
+    // Reset button label after a moment but keep gold tint permanently
+    setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('ok'); }, 1400);
   });
 }
 
 function copyAll() {
   const cmds = [...document.querySelectorAll('.out-cmd')].map(e=>e.textContent).join('\n');
-  navigator.clipboard.writeText(cmds).then(()=>{
+  navigator.clipboard.writeText(cmds).then(() => {
+    // Mark all entries as copied
+    document.querySelectorAll('.out-entry').forEach(e => e.classList.add('was-copied'));
+    document.getElementById('copiedLegend').classList.add('visible');
     const btn = event.target;
     const orig = btn.textContent;
-    btn.textContent='✓ ALL COPIED';
-    setTimeout(()=>btn.textContent=orig,1600);
+    btn.textContent = '✓ ALL COPIED';
+    setTimeout(() => btn.textContent = orig, 1600);
   });
 }
 
 function clearAll() {
-  document.getElementById('bulletinInput').value='';
-  document.getElementById('parseStatus').textContent='';
-  ['cmdPanel','genPanel','outPanel'].forEach(id=>document.getElementById(id).style.display='none');
-  commanders=[]; state={};
+  document.getElementById('bulletinInput').value = '';
+  document.getElementById('parseStatus').textContent = '';
+  ['cmdPanel','genPanel','outPanel'].forEach(id => document.getElementById(id).style.display='none');
+  document.getElementById('outList').innerHTML = '<div class="empty-state">// AWAITING COMMAND GENERATION</div>';
+  document.getElementById('copiedLegend').classList.remove('visible');
+  commanders = []; state = {};
 }
 </script>
 </body>
