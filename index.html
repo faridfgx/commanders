@@ -322,6 +322,71 @@ textarea::placeholder{color:var(--text2);opacity:.5;}
 .copied-legend{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gold);opacity:.6;padding:6px 0 2px;display:none;}
 .copied-legend.visible{display:block;}
 
+
+
+
+/* ── HOW TO USE PANEL ──────────────────────────────────────────────── */
+.howto-panel{
+  background:var(--bg2);border:1px solid var(--border);border-radius:3px;
+  overflow:hidden;margin-bottom:22px;position:relative;
+  display:none;
+}
+.howto-panel.open{display:block;}
+.howto-panel::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--purple),var(--accent),transparent);
+}
+.howto-lang-tabs{
+  display:flex;background:var(--bg3);border-bottom:1px solid var(--border2);
+}
+.hlt{
+  flex:1;padding:11px 6px;text-align:center;cursor:pointer;
+  font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1px;
+  color:var(--text2);border:none;background:transparent;
+  border-bottom:2px solid transparent;transition:all .15s;
+}
+.hlt:hover{color:var(--text);}
+.hlt.active{color:var(--accent);border-bottom-color:var(--accent);background:rgba(0,212,255,0.04);}
+
+.howto-content{padding:22px;}
+.hc-panel{display:none;}
+.hc-panel.active{display:block;}
+.hc-panel[dir="rtl"]{text-align:right;}
+
+.hc-step{display:flex;gap:12px;align-items:flex-start;margin-bottom:13px;}
+.hc-num{
+  font-family:'Orbitron',monospace;font-size:11px;font-weight:900;
+  color:var(--bg);background:var(--accent);border-radius:50%;
+  width:22px;height:22px;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:2px;
+}
+.hc-text{font-size:15px;color:var(--text);line-height:1.55;}
+.hc-text strong{color:var(--accent2);}
+.hc-text em{color:var(--accent);font-style:normal;font-family:'Share Tech Mono',monospace;font-size:13px;}
+
+.hc-cmd-block{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--bg);border:1px solid var(--border);border-radius:3px;
+  padding:9px 14px;margin:10px 0 14px;
+}
+.hc-cmd{font-family:'Share Tech Mono',monospace;font-size:17px;color:var(--accent);font-weight:700;letter-spacing:2px;}
+.hc-copy{
+  background:transparent;border:1px solid var(--accent);border-radius:2px;
+  color:var(--accent);cursor:pointer;padding:4px 10px;
+  font-family:'Share Tech Mono',monospace;font-size:10px;transition:all .15s;
+}
+.hc-copy:hover{background:rgba(0,212,255,0.08);}
+.hc-copy.ok{border-color:var(--accent3);color:var(--accent3);}
+
+.hc-note{
+  font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text2);
+  padding:8px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:3px;
+  margin-top:4px;line-height:1.65;
+}
+.hc-note span{color:var(--danger);}
+.btn-purple-outline{background:transparent;color:var(--purple);border-color:var(--purple);}
+.btn-purple-outline:hover{box-shadow:0 0 14px rgba(191,95,255,0.4);background:rgba(191,95,255,0.06);}
+
 @media(max-width:600px){
   .cc-body{flex-direction:column;}
   .cc-body-left{width:100%;flex-direction:row;justify-content:flex-start;border-right:none;border-bottom:1px solid var(--border2);}
@@ -353,9 +418,128 @@ New format:  [Bulletin]:   [1337] Eva — variance: -1"></textarea>
     <div class="btn-row">
       <button class="btn btn-cyan" onclick="parseBulletin()">⚡ PARSE BULLETIN</button>
       <button class="btn btn-red btn-sm" onclick="clearAll()">✕ CLEAR ALL</button>
+      <button class="btn btn-purple-outline btn-sm" onclick="toggleHowTo()">? HOW TO USE</button>
       <span id="parseStatus" class="parse-status"></span>
       <span id="fmtBadge" style="display:none"></span>
     </div>
+  </div>
+</div>
+
+
+<!-- HOW TO USE PANEL -->
+<div class="howto-panel" id="howtoPanel">
+  <div class="howto-lang-tabs">
+    <button class="hlt active" onclick="switchHowToLang('en',this)">🇬🇧 English</button>
+    <button class="hlt" onclick="switchHowToLang('fr',this)">🇫🇷 Français</button>
+    <button class="hlt" onclick="switchHowToLang('ar',this)">🇩🇿 العربية</button>
+    <button class="hlt" onclick="switchHowToLang('id',this)">🇮🇩 Indonesia</button>
+  </div>
+  <div class="howto-content">
+
+    <!-- ENGLISH -->
+    <div class="hc-panel active" id="hc-en">
+      <div class="hc-step">
+        <div class="hc-num">1</div>
+        <div class="hc-text">Run this command in the game chat to get your commanders list:
+          <div class="hc-cmd-block">
+            <span class="hc-cmd">/variance</span>
+            <button class="hc-copy" onclick="howToCopyCmd(this,'/variance')">COPY</button>
+          </div>
+        </div>
+      </div>
+      <div class="hc-step">
+        <div class="hc-num">2</div>
+        <div class="hc-text">Copy the full <strong>[Bulletin]</strong> result from the game and paste it into the input box above.</div>
+      </div>
+      <div class="hc-step">
+        <div class="hc-num">3</div>
+        <div class="hc-text">Configure stats for each commander — total of all 4 stats must equal exactly <strong>10</strong> — then generate commands.</div>
+      </div>
+      <div class="hc-step">
+        <div class="hc-num">4</div>
+        <div class="hc-text">Copy the generated <em>/setcommanderstats</em> commands and run them in-game. <span style="color:var(--danger)">⚠ Admin only.</span></div>
+      </div>
+      <div class="hc-note"><span>⚠ Admin only:</span> The generated commands can only be executed by game administrators.</div>
+    </div>
+
+    <!-- FRENCH -->
+    <div class="hc-panel" id="hc-fr">
+      <div class="hc-step">
+        <div class="hc-num">1</div>
+        <div class="hc-text">Exécutez cette commande dans le chat du jeu pour obtenir la liste de vos commandants :
+          <div class="hc-cmd-block">
+            <span class="hc-cmd">/variance</span>
+            <button class="hc-copy" onclick="howToCopyCmd(this,'/variance')">COPIER</button>
+          </div>
+        </div>
+      </div>
+      <div class="hc-step">
+        <div class="hc-num">2</div>
+        <div class="hc-text">Copiez le résultat <strong>[Bulletin]</strong> du jeu et collez-le dans la zone de texte ci-dessus.</div>
+      </div>
+      <div class="hc-step">
+        <div class="hc-num">3</div>
+        <div class="hc-text">Configurez les stats de chaque commandant — le total des 4 stats doit être exactement <strong>10</strong> — puis générez les commandes.</div>
+      </div>
+      <div class="hc-step">
+        <div class="hc-num">4</div>
+        <div class="hc-text">Copiez les commandes <em>/setcommanderstats</em> générées et exécutez-les en jeu. <span style="color:var(--danger)">⚠ Admins uniquement.</span></div>
+      </div>
+      <div class="hc-note"><span>⚠ Admins uniquement :</span> Les commandes générées ne peuvent être exécutées que par les administrateurs du jeu.</div>
+    </div>
+
+    <!-- ARABIC -->
+    <div class="hc-panel" id="hc-ar" dir="rtl">
+      <div class="hc-step" style="flex-direction:row-reverse;">
+        <div class="hc-num">1</div>
+        <div class="hc-text">شغّل هذا الأمر في محادثة اللعبة للحصول على قائمة قادتك:
+          <div class="hc-cmd-block" style="flex-direction:row-reverse;">
+            <span class="hc-cmd">/variance</span>
+            <button class="hc-copy" onclick="howToCopyCmd(this,'/variance')">نسخ</button>
+          </div>
+        </div>
+      </div>
+      <div class="hc-step" style="flex-direction:row-reverse;">
+        <div class="hc-num">2</div>
+        <div class="hc-text">انسخ نتيجة <strong>[Bulletin]</strong> من اللعبة والصقها في مربع النص أعلاه.</div>
+      </div>
+      <div class="hc-step" style="flex-direction:row-reverse;">
+        <div class="hc-num">3</div>
+        <div class="hc-text">اضبط إحصائيات كل قائد — يجب أن يساوي مجموع الإحصائيات الأربعة <strong>10</strong> بالضبط — ثم أنشئ الأوامر.</div>
+      </div>
+      <div class="hc-step" style="flex-direction:row-reverse;">
+        <div class="hc-num">4</div>
+        <div class="hc-text">انسخ أوامر <em>/setcommanderstats</em> المُنشأة وشغّلها داخل اللعبة. <span style="color:var(--danger)">⚠ للمشرفين فقط.</span></div>
+      </div>
+      <div class="hc-note" style="text-align:right;"><span>⚠ للمشرفين فقط:</span> الأوامر المُنشأة لا يمكن تنفيذها إلا من قِبل مشرفي اللعبة.</div>
+    </div>
+
+    <!-- INDONESIAN -->
+    <div class="hc-panel" id="hc-id">
+      <div class="hc-step">
+        <div class="hc-num">1</div>
+        <div class="hc-text">Jalankan perintah ini di chat game untuk mendapatkan daftar komandan kamu:
+          <div class="hc-cmd-block">
+            <span class="hc-cmd">/variance</span>
+            <button class="hc-copy" onclick="howToCopyCmd(this,'/variance')">SALIN</button>
+          </div>
+        </div>
+      </div>
+      <div class="hc-step">
+        <div class="hc-num">2</div>
+        <div class="hc-text">Salin hasil <strong>[Bulletin]</strong> dari game dan tempel ke kotak teks di atas.</div>
+      </div>
+      <div class="hc-step">
+        <div class="hc-num">3</div>
+        <div class="hc-text">Atur stat setiap komandan — total keempat stat harus tepat <strong>10</strong> — lalu buat perintah.</div>
+      </div>
+      <div class="hc-step">
+        <div class="hc-num">4</div>
+        <div class="hc-text">Salin perintah <em>/setcommanderstats</em> yang dihasilkan dan jalankan di dalam game. <span style="color:var(--danger)">⚠ Khusus Admin.</span></div>
+      </div>
+      <div class="hc-note"><span>⚠ Khusus Admin:</span> Perintah yang dihasilkan hanya dapat dijalankan oleh administrator game.</div>
+    </div>
+
   </div>
 </div>
 
@@ -659,12 +843,11 @@ function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
 function spinnerChange(id, key, delta) {
   const s = state[id];
-  const old = s.vals[key];
-  let next = Math.round((old + delta) * 10) / 10;
+  let next = Math.round((s.vals[key] + delta) * 10) / 10;
   next = clamp(next, 0, 5);
   s.vals[key] = next;
-  if (next > 0) s.selected = true; // auto-select when a stat is set above 0
-  const inp = document.getElementById(`spin-${id}-${key}`);
+  if (next > 0) s.selected = true;
+  const inp = document.getElementById('spin-' + id + '-' + key);
   if (inp) inp.value = next;
   updateInfoLabel(id);
   updateBadge();
@@ -675,7 +858,7 @@ function spinnerInput(id, key, val) {
   if (isNaN(v)) v = 0;
   v = clamp(Math.round(v * 10) / 10, 0, 5);
   state[id].vals[key] = v;
-  if (v > 0) state[id].selected = true; // auto-select when a stat is typed above 0
+  if (v > 0) state[id].selected = true;
   updateInfoLabel(id);
   updateBadge();
 }
@@ -686,12 +869,24 @@ function updateInfoLabel(id) {
   el.innerHTML = buildInfoText(id);
 }
 
+function statTotal(id) {
+  return Math.round(Object.values(state[id].vals).reduce((a, b) => a + b, 0) * 10) / 10;
+}
+
 function buildInfoText(id) {
   const s = state[id];
   const nonZero = STATS.filter(st => s.vals[st.key] > 0);
   if (!nonZero.length) return `No stats configured`;
+  const total = statTotal(id);
+  const over = total > 10;
   const parts = nonZero.map(st => `<span>${st.label}=${s.vals[st.key]}</span>`);
-  return `Stats: ${parts.join(' + ')} → command values: ${nonZero.map(st => `<span>${Math.round(s.vals[st.key]*10)}</span>`).join(' ')}`;
+  const exact = total === 10;
+  const totalHtml = exact
+    ? `<span style="color:var(--accent3)">TOTAL: ${total}/10 ✓</span>`
+    : total > 10
+      ? `<span style="color:var(--danger);font-weight:700">TOTAL: ${total}/10 ⚠ EXCEEDS LIMIT</span>`
+      : `<span style="color:var(--accent2)">TOTAL: ${total}/10 — must equal 10</span>`;
+  return `Stats: ${parts.join(' + ')} — ${totalHtml}`;
 }
 
 function setMode(id, mode) {
@@ -1017,6 +1212,11 @@ function generateOne(id) {
     if (w) { w.textContent = '⚠ Configure at least 1 stat first.'; w.style.display = 'block'; }
     return;
   }
+  const total = statTotal(id);
+  if (total !== 10) {
+    if (w) { w.textContent = `⚠ Total stats = ${total}/10 — must equal exactly 10 to generate.`; w.style.display = 'block'; }
+    return;
+  }
   const c = commanders.find(x => x.id === id);
   replaceOutput([{ cmd: buildSetCmd(id), name: c.name }]);
 }
@@ -1030,6 +1230,15 @@ function generateAll() {
   if (unconfigured.length) {
     const names = unconfigured.map(([id]) => commanders.find(c => c.id === id)?.name).join(', ');
     warn.textContent = `⚠ No stats set for: ${names}`;
+    warn.style.display = 'block'; return;
+  }
+  const notExact = selected.filter(([id]) => statTotal(id) !== 10);
+  if (notExact.length) {
+    const names = notExact.map(([id]) => {
+      const c = commanders.find(x => x.id === id);
+      return `${c.name} (${statTotal(id)}/10)`;
+    }).join(', ');
+    warn.textContent = `⚠ Stats must total exactly 10 for: ${names}`;
     warn.style.display = 'block'; return;
   }
   const results = selected.map(([id]) => {
@@ -1094,6 +1303,34 @@ function clearAll() {
   document.getElementById('copiedLegend').classList.remove('visible');
   commanders = []; state = {};
 }
+
+
+
+
+// ── HOW TO USE ────────────────────────────────────────────────────────────────
+function toggleHowTo() {
+  const panel = document.getElementById('howtoPanel');
+  const btn = document.querySelector('[onclick="toggleHowTo()"]');
+  const isOpen = panel.classList.toggle('open');
+  btn.textContent = isOpen ? '✕ CLOSE GUIDE' : '? HOW TO USE';
+}
+
+function switchHowToLang(lang, tab) {
+  document.querySelectorAll('.hc-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.hlt').forEach(t => t.classList.remove('active'));
+  document.getElementById('hc-' + lang).classList.add('active');
+  tab.classList.add('active');
+}
+
+function howToCopyCmd(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓';
+    btn.classList.add('ok');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('ok'); }, 1500);
+  });
+}
+
 </script>
 </body>
 </html>
