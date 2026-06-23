@@ -649,6 +649,7 @@ function clickToggleStat(id, key) {
     }
     s.vals[key] = 5;
     s.clickOrder.push(key);
+    s.selected = true; // auto-select when a stat is activated
   }
   refreshCard(id);
   updateBadge();
@@ -662,6 +663,7 @@ function spinnerChange(id, key, delta) {
   let next = Math.round((old + delta) * 10) / 10;
   next = clamp(next, 0, 5);
   s.vals[key] = next;
+  if (next > 0) s.selected = true; // auto-select when a stat is set above 0
   const inp = document.getElementById(`spin-${id}-${key}`);
   if (inp) inp.value = next;
   updateInfoLabel(id);
@@ -673,6 +675,7 @@ function spinnerInput(id, key, val) {
   if (isNaN(v)) v = 0;
   v = clamp(Math.round(v * 10) / 10, 0, 5);
   state[id].vals[key] = v;
+  if (v > 0) state[id].selected = true; // auto-select when a stat is typed above 0
   updateInfoLabel(id);
   updateBadge();
 }
